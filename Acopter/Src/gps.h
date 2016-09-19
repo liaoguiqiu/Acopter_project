@@ -4,5 +4,19 @@
 #include "include.h"
 #include "mymath.h"
  
+class GPS
+{
+public:
+	GPS()
+	{
+	
+	
+	}
+	 
+
+private:
+
+};
+ 
 
 #endif
