@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\drivers">
+      <UniqueIdentifier>{b4122503-26a4-4ad4-92ef-9f65e06ca4ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{33914545-c336-4021-ac48-6b8003f0e657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\poliot">
+      <UniqueIdentifier>{fd0a4fec-d89a-44ad-b6a4-c22c7b6be8b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\task">
+      <UniqueIdentifier>{48c72032-ca25-4e7f-b845-b4620a351ed2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\main">
+      <UniqueIdentifier>{915a83fe-4e01-4b40-abfe-ecec7cda5279}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Acopter\Src\AHRS.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\baro.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\datatrans.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\flash.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\gps.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\magnet.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\pwm.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\rc.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\sonar.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\math\filter.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\math\matrix3.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\math\quaternion.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\math\vector3.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\mymath.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\poliot\ctrl.cpp">
+      <Filter>Source Files\poliot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\poliot\height_ctrl.cpp">
+      <Filter>Source Files\poliot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\poliot\imu.cpp">
+      <Filter>Source Files\poliot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\poliot\parameter.cpp">
+      <Filter>Source Files\poliot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\init.cpp">
+      <Filter>Source Files\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\scheduler.cpp">
+      <Filter>Source Files\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\time.cpp">
+      <Filter>Source Files\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\main.c">
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\stm32f4xx_hal_msp.c">
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\stm32f4xx_it.c">
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Acopter\Src\AHRS.h">
+      <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\baro.h">
+      <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\datatrans.h">
+      <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\flash.h">
+      <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\gps.h">
+      <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\magnet.h">
+      <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\pwm.h">
+      <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\rc.h">
+      <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\sonar.h">
+      <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\math\filter.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\math\matrix3.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\math\quaternion.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\math\rotation.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\math\vector3.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\mymath.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\poliot\ctrl.h">
+      <Filter>Source Files\poliot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\poliot\height_ctrl.h">
+      <Filter>Source Files\poliot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\poliot\imu.h">
+      <Filter>Source Files\poliot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\poliot\parameter.h">
+      <Filter>Source Files\poliot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\init.h">
+      <Filter>Source Files\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\scheduler.h">
+      <Filter>Source Files\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\time.h">
+      <Filter>Source Files\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\include.h">
+      <Filter>Source Files\main</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

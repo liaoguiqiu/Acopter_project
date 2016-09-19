@@ -1,0 +1,15 @@
+"F:\software-windows\Iar\arm\bin\armproc.dll" 
+
+"F:\software-windows\Iar\arm\bin\armstlink2.dll" 
+
+"G:\STM32\Acopter\Acopter\EWARM\Acopter\Exe\Acopter.out" 
+
+--plugin "F:\software-windows\Iar\arm\bin\armbat.dll" 
+
+--device_macro "F:\software-windows\Iar\arm\config\debugger\ST\STM32F4xx.dmac" 
+
+--flash_loader "F:\software-windows\Iar\arm\config\flashloader\ST\FlashSTM32F4xxx.board" 
+
+
+
+
