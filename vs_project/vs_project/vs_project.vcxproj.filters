@@ -102,6 +102,9 @@
     <ClCompile Include="..\..\Acopter\Src\stm32f4xx_it.c">
       <Filter>Source Files\main</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\led.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Acopter\Src\AHRS.h">
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Acopter\Src\include.h">
       <Filter>Source Files\main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\led.h">
+      <Filter>Source Files\drivers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

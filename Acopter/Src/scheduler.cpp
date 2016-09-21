@@ -12,8 +12,8 @@
 #include "imu.h"
 #include "flash.h"
 #include "parameter.h"
-
-
+#include "ctrl.h"
+#include  "led.h"
 Scheduler scheduler;
 
 /////////////////////////UCOSII»ŒŒÒ…Ë÷√///////////////////////////////////
@@ -351,7 +351,9 @@ void Scheduler::cyclest_Duty_3ms()
 	mag_s.filt_data();
 
 	rc.RC_Duty(data_time3, Rc_Pwm_In);
-
+	
+	ctrl_s.CTRL_1(data_time3);
+		
         
 }
 
@@ -364,7 +366,7 @@ void Scheduler::cyclest_Duty_5ms()
 	  ahrs.Acc.x, ahrs.Acc.y, ahrs.Acc.z,
 	  &imu_dcm.Roll, &imu_dcm.Pitch, &imu_dcm.Yaw);
 
-
+  ctrl_s.CTRL_2(data_time5);
         
 }
 
@@ -385,6 +387,9 @@ void Scheduler::cyclest_Duty_50ms()
 {
 	
 	check_flash_save();
+
+	led.led_change();
+
 }
 
 void Scheduler:: check_flash_save()

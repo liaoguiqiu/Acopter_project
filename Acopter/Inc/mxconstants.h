@@ -75,6 +75,8 @@
 #define tim4_ch4_out4_GPIO_Port GPIOD
 #define CS_MPU_Pin GPIO_PIN_0
 #define CS_MPU_GPIO_Port GPIOD
+#define LED1_Pin GPIO_PIN_9
+#define LED1_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

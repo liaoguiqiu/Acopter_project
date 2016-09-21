@@ -132,12 +132,12 @@ void CTRL_S:: CTRL_1(float T)  //x roll,y pitch,z yaw
 
 	/* 角速度直接微分（角加速度），负反馈可形成角速度的阻尼（阻碍角速度的变化）*/
 	ctrl_1.damp.x = (ahrs.Gyro_deg.x - g_old[A_X]) *(0.002f / T);//ctrl_1.PID[PIDROLL].kdamp
-	ctrl_1.damp.y = (-ahrs.Gyro_deg.y - g_old[A_Y]) *(0.002f / T);//ctrl_1.PID[PIDPITCH].kdamp *
-	ctrl_1.damp.z = (-ahrs.Gyro_deg.z - g_old[A_Z]) *(0.002f / T);//ctrl_1.PID[PIDYAW].kdamp	 *
+	ctrl_1.damp.y = (ahrs.Gyro_deg.y - g_old[A_Y]) *(0.002f / T);//ctrl_1.PID[PIDPITCH].kdamp *
+	ctrl_1.damp.z = (ahrs.Gyro_deg.z - g_old[A_Z]) *(0.002f / T);//ctrl_1.PID[PIDYAW].kdamp	 *
 	/* 角速度误差 */
 	ctrl_1.err.x = (except_AS.x - ahrs.Gyro_deg.x) *(300.0f / MAX_CTRL_ASPEED);
-	ctrl_1.err.y = (except_AS.y + ahrs.Gyro_deg.y) *(300.0f / MAX_CTRL_ASPEED);  //-y
-	ctrl_1.err.z = (except_AS.z + ahrs.Gyro_deg.z) *(300.0f / MAX_CTRL_ASPEED);	 //-z
+	ctrl_1.err.y = (except_AS.y - ahrs.Gyro_deg.y) *(300.0f / MAX_CTRL_ASPEED);  //-y
+	ctrl_1.err.z = (except_AS.z - ahrs.Gyro_deg.z) *(300.0f / MAX_CTRL_ASPEED);	 //-z
 	/* 角速度误差权重 */
 	ctrl_1.err_weight.x = ABS(ctrl_1.err.x) / MAX_CTRL_ASPEED;
 	ctrl_1.err_weight.y = ABS(ctrl_1.err.y) / MAX_CTRL_ASPEED;
@@ -191,8 +191,47 @@ void CTRL_S:: CTRL_1(float T)  //x roll,y pitch,z yaw
 	ctrl_1.err_old.z = ctrl_1.err.z;
 
 	g_old[A_X] = ahrs.Gyro_deg.x;
-	g_old[A_Y] = -ahrs.Gyro_deg.y;
-	g_old[A_Z] = -ahrs.Gyro_deg.z;
+	g_old[A_Y] = ahrs.Gyro_deg.y;
+	g_old[A_Z] = ahrs.Gyro_deg.z;
+}
+
+
+#define  CTRL_HEIGHT  0
+
+
+void CTRL_S:: Thr_Ctrl(float T)
+{
+
+	static float Thr_tmp;
+	thr = 500 + rc.CH_filter[THR]; //油门值 0 ~ 1000
+
+
+
+	Thr_tmp += 10 * 3.14f *T *(thr / 450.0f - Thr_tmp); //低通滤波
+	//Thr_tmp += 10 *3.14f *T *(thr/530.0f - Thr_tmp); //低通滤波
+	Thr_Weight = LIMIT(Thr_tmp, 0, 1);    							//后边多处分离数据会用到这个值
+
+ 
+
+	if (thr < 100)
+	{
+		Thr_Low = 1;
+	}
+	else
+	{
+		Thr_Low = 0;
+	}
+
+#if(CTRL_HEIGHT)
+	Height_Ctrl(T, thr);
+	thr_value = Thr_Weight *height_ctrl_out;
+	// thr_value =  height_ctrl_out;   //实际使用值
+
+#else
+	thr_value = thr;   //实际使用值
+#endif
+
+	thr_value = LIMIT(thr_value, 0, 10 * MAX_THR *MAX_PWM / 100);
 }
 
 void CTRL_S:: All_Out(float out_roll, float out_pitch, float out_yaw)
@@ -257,20 +296,7 @@ void CTRL_S:: All_Out(float out_roll, float out_pitch, float out_yaw)
 	motor_out[2] = (s16)(motor[2]);
 	motor_out[3] = (s16)(motor[3]);
 
-	/*--错误补丁--*/
-	//        if(isnan(motor[0])||isnan(motor[1])||isnan(motor[2])||isnan(motor[3]))
-	//        {
-	//        motor_out[0] =(short)(Thr_Weight*(float)last_motor_out[0]);  
-	//	motor_out[1] =(short)(Thr_Weight* (float)last_motor_out[1]);	 
-	//	motor_out[2] =(short)(Thr_Weight*(float) last_motor_out[2]);
-	//	motor_out[3] = (short)(Thr_Weight*(float)last_motor_out[3]);
-	//
-	//        }
-	//        last_motor_out[0] =  motor_out[0];  
-	//	last_motor_out[1] =  motor_out[1];	 
-	//	last_motor_out[2] =  motor_out[2];
-	//	last_motor_out[3] =  motor_out[3];
-	/*--错误补丁--*/
+	  
 	SetPwm(motor_out, 0, 1000); //1000
 
 }

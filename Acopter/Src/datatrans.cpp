@@ -10,8 +10,8 @@ Datatrans data_trans;
 
 void Datatrans:: send_all_fly_data_to_ANO(void)
 {
-	send_15_data((s16 )1, (s16) 2, (s16) 3,
-		(s16) 4, (s16) 5, (s16) 6,
+	send_15_data((s16)ctrl_s.motor[0], (s16)ctrl_s.motor[1], (s16)ctrl_s.motor[2],
+		(s16)ctrl_s.motor[3], (s16)5, (s16)6,
 		(s16) 7,( s16 )8, (s16) 9,
 		(float) imu_dcm.Roll, (float) imu_dcm.Pitch, (float) imu_dcm.Yaw,
 		(s32) 0, (u8) 0, (u8) 0);

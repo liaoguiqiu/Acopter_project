@@ -1,6 +1,10 @@
 #include "pwm.h"
 #include "rc.h"
- 
+//·­×ªÊ±¼ä
+#define PWM_FULL_TIME 1800
+#define MOTOR_STOP_TIME 1000
+
+
 void SetPwm(int16_t pwm[], s16 min, s16 max)
 {
 	u8 i;
@@ -10,7 +14,7 @@ void SetPwm(int16_t pwm[], s16 min, s16 max)
 	{
 		pwm_tem[i] = pwm[i];
 		pwm_tem[i] = (short)LIMIT(pwm_tem[i], min, max);
-		pwm_tem[i] = pwm_tem[i] * 400 / 1000 + 550;
+		pwm_tem[i] = pwm_tem[i] * (PWM_FULL_TIME - MOTOR_STOP_TIME) / 1000 + MOTOR_STOP_TIME;
 
 	}
 
@@ -25,10 +29,10 @@ void SetPwm(int16_t pwm[], s16 min, s16 max)
 	}
 	else
 	{
-		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 500);
-		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 500);
-		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 500);
-		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, 500);
+		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, MOTOR_STOP_TIME);
+		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, MOTOR_STOP_TIME);
+		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, MOTOR_STOP_TIME);
+		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, MOTOR_STOP_TIME);
 
 	}
 

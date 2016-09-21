@@ -53,7 +53,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../Acopter\Src;../../Acopter\Src\math;../../Acopter\Src\poliot;G:\STM32\Acopter\Acopter\Src\SYSTEM;G:\STM32\Acopter\Acopter\Src\SYSTEM\sys;G:\STM32\Acopter\Acopter\Src\SYSTEM\delay;G:\STM32\Acopter\Acopter\Drivers\STM32F4xx_HAL_Driver\Src;G:\STM32\Acopter\Acopter\Drivers\STM32F4xx_HAL_Driver\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>G:\STM32\Acopter\Acopter\Drivers\STM32F4xx_HAL_Driver\Inc;G:\STM32\Acopter\Acopter\Inc;../../Acopter\Src;../../Acopter\Src\math;../../Acopter\Src\poliot;G:\STM32\Acopter\Acopter\Src\SYSTEM;G:\STM32\Acopter\Acopter\Src\SYSTEM\sys;G:\STM32\Acopter\Acopter\Src\SYSTEM\delay;G:\STM32\Acopter\Acopter\Drivers\STM32F4xx_HAL_Driver\Src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -85,6 +85,7 @@
     <ClCompile Include="..\..\Acopter\Src\flash.cpp" />
     <ClCompile Include="..\..\Acopter\Src\gps.cpp" />
     <ClCompile Include="..\..\Acopter\Src\init.cpp" />
+    <ClCompile Include="..\..\Acopter\Src\led.cpp" />
     <ClCompile Include="..\..\Acopter\Src\magnet.cpp" />
     <ClCompile Include="..\..\Acopter\Src\main.c" />
     <ClCompile Include="..\..\Acopter\Src\math\filter.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="..\..\Acopter\Src\gps.h" />
     <ClInclude Include="..\..\Acopter\Src\include.h" />
     <ClInclude Include="..\..\Acopter\Src\init.h" />
+    <ClInclude Include="..\..\Acopter\Src\led.h" />
     <ClInclude Include="..\..\Acopter\Src\magnet.h" />
     <ClInclude Include="..\..\Acopter\Src\math\filter.h" />
     <ClInclude Include="..\..\Acopter\Src\math\matrix3.h" />

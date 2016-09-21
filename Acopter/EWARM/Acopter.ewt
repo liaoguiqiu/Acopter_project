@@ -1091,6 +1091,12 @@
           <name>$PROJ_DIR$\..\Src\gps.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\Src\led.cpp</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\Src\led.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\Src\magnet.cpp</name>
         </file>
         <file>
@@ -1330,6 +1336,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c</name>

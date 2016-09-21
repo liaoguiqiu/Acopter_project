@@ -5,7 +5,7 @@
 #include "rc.h"
 #include "imu.h"
 #include "parameter.h"
-#define CTRL_HEIGHT  1
+ 
 enum PIDItem
 {
 	PIDROLL = 0,
