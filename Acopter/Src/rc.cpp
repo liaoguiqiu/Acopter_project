@@ -6,8 +6,8 @@ Acopter_RC rc;
 
 const short MAX_CH[CH_NUM] = { 1930, 1930, 1930, 1930, 2070, 2070, 2070, 2070 };	//摇杆最大
 const short MIN_CH[CH_NUM] = { 1109, 1109, 1109, 1109, 970, 970, 970, 970 };	//摇杆最小
-const char CH_DIR[CH_NUM] = {0,0,0,0,0,0,0,0};  //摇杆方向
-const short CH_in_Mapping[CH_NUM] = { 0, 1, 2, 3, 4, 5, 6, 7 };    //通道映射
+const char CH_DIR[CH_NUM] = {1,1,0,0,0,0,0,0};  //摇杆方向
+const short CH_in_Mapping[CH_NUM] = { 1, 0, 2, 3, 4, 5, 6, 7 };    //通道映射
 
 void Acopter_RC:: CH_Mapping_Fun(u16 *in, u16 *Mapped_CH)
 {

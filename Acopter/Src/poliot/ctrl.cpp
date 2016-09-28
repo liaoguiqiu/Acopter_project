@@ -119,8 +119,8 @@ void CTRL_S:: CTRL_1(float T)  //x roll,y pitch,z yaw
 	Vector3f EXP_LPF_TMP;
 	/* 给期望（目标）角速度 */
 	EXP_LPF_TMP.x = MAX_CTRL_ASPEED *(ctrl_2.out.x / ANGLE_TO_MAX_AS);//*( (CH_filter[0])/500.0f );//
-	EXP_LPF_TMP.y = MAX_CTRL_ASPEED *(ctrl_2.out.y / ANGLE_TO_MAX_AS);//*( (CH_filter[1])/500.0f );//
-	EXP_LPF_TMP.z = MAX_CTRL_ASPEED *(ctrl_2.out.z / ANGLE_TO_MAX_AS);
+	EXP_LPF_TMP.y = -MAX_CTRL_ASPEED *(ctrl_2.out.y / ANGLE_TO_MAX_AS);//*( (CH_filter[1])/500.0f );//
+	EXP_LPF_TMP.z = -MAX_CTRL_ASPEED *(ctrl_2.out.z / ANGLE_TO_MAX_AS);
 
 	except_AS.x = EXP_LPF_TMP.x;//20 *3.14 *T *( EXP_LPF_TMP.x - except_AS.x );//
 	except_AS.y = EXP_LPF_TMP.y;//20 *3.14 *T *( EXP_LPF_TMP.y - except_AS.y );//
@@ -244,10 +244,10 @@ void CTRL_S:: All_Out(float out_roll, float out_pitch, float out_yaw)
 
 	out_yaw = LIMIT(out_yaw, -5 * MAX_THR, 5 * MAX_THR); //50%
 
-	posture_value[0] = -out_roll + out_pitch - out_yaw;
-	posture_value[1] = +out_roll + out_pitch + out_yaw;
-	posture_value[2] = +out_roll - out_pitch - out_yaw;
-	posture_value[3] = -out_roll - out_pitch + out_yaw;
+	posture_value[0] = -out_roll - out_pitch - out_yaw;
+	posture_value[1] = +out_roll - out_pitch + out_yaw;
+	posture_value[2] = +out_roll + out_pitch - out_yaw;
+	posture_value[3] = -out_roll + out_pitch + out_yaw;
 
 	for (i = 0; i<4; i++)
 	{

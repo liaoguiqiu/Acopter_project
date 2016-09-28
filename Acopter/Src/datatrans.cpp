@@ -1,5 +1,9 @@
 #include "datatrans.h"
 #include "ctrl.h"
+#include "AHRS.h"
+#include "magnet.h"
+#include "flash.h"
+
 #define BYTE0(dwTemp)       ( *( (char *)(&dwTemp)		) )
 #define BYTE1(dwTemp)       ( *( (char *)(&dwTemp) + 1) )
 #define BYTE2(dwTemp)       ( *( (char *)(&dwTemp) + 2) )
@@ -11,8 +15,8 @@ Datatrans data_trans;
 void Datatrans:: send_all_fly_data_to_ANO(void)
 {
 	send_15_data((s16)ctrl_s.motor[0], (s16)ctrl_s.motor[1], (s16)ctrl_s.motor[2],
-		(s16)ctrl_s.motor[3], (s16)5, (s16)6,
-		(s16) 7,( s16 )8, (s16) 9,
+		(s16)ctrl_s.motor[3], (s16)ctrl_s.except_AS.y, (s16)ctrl_s.except_AS.z,
+		(s16)ahrs.Gyro.x, (s16)ahrs.Gyro.y, (s16)ahrs.Gyro.z,
 		(float) imu_dcm.Roll, (float) imu_dcm.Pitch, (float) imu_dcm.Yaw,
 		(s32) 0, (u8) 0, (u8) 0);
 }
@@ -339,14 +343,47 @@ void Datatrans:: ANO_DT_Data_Receive_Anl(u8 *data_buf, u8 num)
 	if (!(sum == *(data_buf + num - 1)))		return;		//判断sum
 	if (!(*(data_buf) == 0xAA && *(data_buf + 1) == 0xAF))		return;		//判断帧头
 
-	//返回参数
+    /*------传感器校准------*/
+	if (*(data_buf + 2) == 0X01)
+	{
+		if (*(data_buf + 4) == 0X01)
+		{
+			ahrs.Acc_CALIBRATE = 1;
+			//mpu6050.Cali_3d = 1;
+		}
+		else if (*(data_buf + 4) == 0X02)
+			ahrs.Gyro_CALIBRATE = 1;
+		/*else if (*(data_buf + 4) == 0X03)
+		{
+			mpu6050.Acc_CALIBRATE = 1;
+			mpu6050.Gyro_CALIBRATE = 1;
+		}*/
+		else if (*(data_buf + 4) == 0X04)
+		{
+			mag_s. Mag_CALIBRATED = 1;
+		}
+		 
+	}
+
+	
 	if (*(data_buf + 2) == 0X02)
 	{
+          //返回参数
 		if (*(data_buf + 4) == 0X01)
 		{
 			send_pid_para = 1;
 			 
 		}
+                
+                if (*(data_buf + 4) == 0XA1)
+		{
+		
+              
+			flash_save.save_on = 1;
+                   
+			 
+		}
+                
 	 
 	}
 
