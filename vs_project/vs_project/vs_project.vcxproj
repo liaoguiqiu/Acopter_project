@@ -155,6 +155,7 @@
     <ClCompile Include="..\..\Acopter\Src\datatrans.cpp" />
     <ClCompile Include="..\..\Acopter\Src\flash.cpp" />
     <ClCompile Include="..\..\Acopter\Src\gps.cpp" />
+    <ClCompile Include="..\..\Acopter\Src\i2c_soft.cpp" />
     <ClCompile Include="..\..\Acopter\Src\init.cpp" />
     <ClCompile Include="..\..\Acopter\Src\led.cpp" />
     <ClCompile Include="..\..\Acopter\Src\magnet.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="..\..\Acopter\Src\datatrans.h" />
     <ClInclude Include="..\..\Acopter\Src\flash.h" />
     <ClInclude Include="..\..\Acopter\Src\gps.h" />
+    <ClInclude Include="..\..\Acopter\Src\i2c_soft.h" />
     <ClInclude Include="..\..\Acopter\Src\include.h" />
     <ClInclude Include="..\..\Acopter\Src\init.h" />
     <ClInclude Include="..\..\Acopter\Src\led.h" />

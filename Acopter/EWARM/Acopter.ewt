@@ -1091,6 +1091,12 @@
           <name>$PROJ_DIR$\..\Src\gps.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\Src\i2c_soft.cpp</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\Src\i2c_soft.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\Src\led.cpp</name>
         </file>
         <file>

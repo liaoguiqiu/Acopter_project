@@ -1,4 +1,8 @@
- 
+#ifndef __FLASH_H
+#define __FLASH_H 
+
+
+
 #include "include.h"
 //#include "stm32f4xx_nucleo_144.h"
 
@@ -56,3 +60,5 @@ private:
  
 
 extern      flash_save_para flash_save;
+
+#endif

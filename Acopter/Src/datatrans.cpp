@@ -3,6 +3,8 @@
 #include "AHRS.h"
 #include "magnet.h"
 #include "flash.h"
+#include "baro.h"
+
 
 #define BYTE0(dwTemp)       ( *( (char *)(&dwTemp)		) )
 #define BYTE1(dwTemp)       ( *( (char *)(&dwTemp) + 1) )
@@ -14,9 +16,9 @@ Datatrans data_trans;
 
 void Datatrans:: send_all_fly_data_to_ANO(void)
 {
-	send_15_data((s16)ctrl_s.motor[0], (s16)ctrl_s.motor[1], (s16)ctrl_s.motor[2],
+	send_15_data((s16)1, (s16)ctrl_s.motor[1], (s16)ctrl_s.motor[2],
 		(s16)ctrl_s.motor[3], (s16)ctrl_s.except_AS.y, (s16)ctrl_s.except_AS.z,
-		(s16)ahrs.Gyro.x, (s16)ahrs.Gyro.y, (s16)ahrs.Gyro.z,
+		(s16)ahrs.Gyro_deg.x, (s16)ahrs.Gyro_deg.y, (s16)ahrs.Gyro_deg.z,
 		(float) imu_dcm.Roll, (float) imu_dcm.Pitch, (float) imu_dcm.Yaw,
 		(s32) 0, (u8) 0, (u8) 0);
 }
@@ -91,7 +93,7 @@ void Datatrans:: send_15_data(s16 a_x, s16 a_y, s16 a_z,
 
 		u8 _cnt2 = 0;
 		u8 _cnt3 = 0;
-		vs32 _temp2 = alt;
+		int32_t _temp2 = alt;
 		_cnt3 = _cnt;
 		data_to_send[_cnt++] = 0xAA;
 		data_to_send[_cnt++] = 0xAA;

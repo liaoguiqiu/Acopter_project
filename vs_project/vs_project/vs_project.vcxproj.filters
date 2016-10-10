@@ -318,6 +318,9 @@
     <ClCompile Include="..\..\Acopter\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\i2c_soft.cpp">
+      <Filter>Source Files\drivers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Acopter\Src\AHRS.h">
@@ -601,6 +604,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Acopter\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\i2c_soft.h">
+      <Filter>Source Files\drivers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

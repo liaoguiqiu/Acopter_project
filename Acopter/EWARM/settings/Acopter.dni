@@ -13,7 +13,7 @@ CStepIntDis=_ 0
 stlinkserialNo=2798FD0D
 stlinkfoundProbes=
 [DebugChecksum]
-Checksum=-1481858739
+Checksum=1138822444
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -42,11 +42,8 @@ ITMportsLogFile=0
 ITMlogFile=$PROJ_DIR$\ITM.log
 [JLinkDriver]
 CStepIntDis=_ 0
-[struct_types]
-Fmt0=class AHRS_S-Acc_CALIBRATE	3	0
-Fmt1=class AHRS_S-Gyro_CALIBRATE	3	0
-Fmt2=class MAG_S-Mag_CALIBRATED	3	0
-Fmt3=class flash_save_para-save_on	3	0
+[watch_formats]
+Fmt0={W}42:baroAlt	3	0
 [Trace2]
 Enabled=0
 ShowSource=0

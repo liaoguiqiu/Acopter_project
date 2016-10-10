@@ -105,7 +105,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
 
     /* Peripheral DMA init*/
   
-    hdma_spi3_rx.Instance = DMA1_Stream0;
+    hdma_spi3_rx.Instance = DMA1_Stream2;
     hdma_spi3_rx.Init.Channel = DMA_CHANNEL_0;
     hdma_spi3_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_spi3_rx.Init.PeriphInc = DMA_PINC_DISABLE;

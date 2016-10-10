@@ -64,4 +64,6 @@ extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim12;
 extern SPI_HandleTypeDef hspi3;
+
+extern SPI_HandleTypeDef hspi1;
 #endif

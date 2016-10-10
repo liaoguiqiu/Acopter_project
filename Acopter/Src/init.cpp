@@ -6,6 +6,8 @@
 #include "time.h"
 #include "scheduler.h"
 #include "AHRS.h"
+#include "baro.h"
+
 char Init_Finish=0;
 
 
@@ -21,8 +23,9 @@ void All_Init()
         /*-----参数---*/
         parameter.Para_Init();
         
-        
-        
+        /*-----气压计-------*/
+		MS5611_Init();
+	//	baro.MS5611_Init();
         /*---陀螺仪----*/
         ahrs. MPU9250_Init(&hspi3);
         while (ahrs. MPU9250_Check() != SUCCESS)

@@ -14,20 +14,21 @@
 #include "parameter.h"
 #include "ctrl.h"
 #include  "led.h"
+#include "baro.h"
 Scheduler scheduler;
 
-/////////////////////////UCOSIIÈÎÎñÉèÖÃ///////////////////////////////////
+/////////////////////////UCOSIIä»»åŠ¡è®¾ç½®///////////////////////////////////
 
 
-//¾«×¼ÖÜÆÚÈÎÎñ(ÖÜÆÚ¾ø¶ÔÕıÈ·£¬ÇÒÔËĞĞÊ±¼ä¶ÌµÄÈÎÎñ)
-//ÉèÖÃÈÎÎñÓÅÏÈ¼¶
+//ç²¾å‡†å‘¨æœŸä»»åŠ¡(å‘¨æœŸç»å¯¹æ­£ç¡®ï¼Œä¸”è¿è¡Œæ—¶é—´çŸ­çš„ä»»åŠ¡)
+//è®¾ç½®ä»»åŠ¡ä¼˜å…ˆçº§
 #define  CYCLEST_TASK_PRIO       			1 
-//ÉèÖÃÈÎÎñ¶ÑÕ»´óĞ¡
+//è®¾ç½®ä»»åŠ¡å †æ ˆå¤§å°
 #define CYCLEST_STK_SIZE  		    		2048
-//ÈÎÎñ¶ÑÕ»	
+//ä»»åŠ¡å †æ ˆ	
 OS_STK CYCLEST_TASK_STK[CYCLEST_STK_SIZE];
-//ÈÎÎñº¯Êı
-OS_EVENT * sem_cyclest;		// cyvlestºÅÁ¿Ö¸Õë
+//ä»»åŠ¡å‡½æ•°
+OS_EVENT * sem_cyclest;		// cyvlestå·é‡æŒ‡é’ˆ
 
 void cyclest_task(void *pdata)
 {
@@ -38,22 +39,22 @@ void cyclest_task(void *pdata)
 		{
 			scheduler.cyclest_loop();
 
-			scheduler.loop.check_flag_cyclest = 0;		//Ñ­»·ÔËĞĞÍê±Ï±êÖ¾
+			scheduler.loop.check_flag_cyclest = 0;		//å¾ªç¯è¿è¡Œå®Œæ¯•æ ‡å¿—
 		}
 	}
 }
 
 
-//ÖÜÆÚ×¼È·£¬ÔËĞĞÊ±¼ä½Ï³¤£¬¿É·ÖÊ±¼äÆ¬¶ÎÔËĞĞÈÎÎñ
-//ÉèÖÃÈÎÎñÓÅÏÈ¼¶
+//å‘¨æœŸå‡†ç¡®ï¼Œè¿è¡Œæ—¶é—´è¾ƒé•¿ï¼Œå¯åˆ†æ—¶é—´ç‰‡æ®µè¿è¡Œä»»åŠ¡
+//è®¾ç½®ä»»åŠ¡ä¼˜å…ˆçº§
 #define CYCLER_TASK_PRIO       			2
-//ÉèÖÃÈÎÎñ¶ÑÕ»´óĞ¡
+//è®¾ç½®ä»»åŠ¡å †æ ˆå¤§å°
 #define CYCLER_STK_SIZE  				1024
-//ÈÎÎñ¶ÑÕ»
+//ä»»åŠ¡å †æ ˆ
 OS_STK CYCLER_TASK_STK[CYCLER_STK_SIZE];
-//ÈÎÎñº¯Êı
+//ä»»åŠ¡å‡½æ•°
 
-OS_EVENT * sem_cycler;		// ĞÅºÅÁ¿Ö¸Õë
+OS_EVENT * sem_cycler;		// ä¿¡å·é‡æŒ‡é’ˆ
  
 void cycler_task(void *pdata)
 {
@@ -65,21 +66,21 @@ void cycler_task(void *pdata)
 		{
 		
 			scheduler.cycler_loop();
-			scheduler.loop.check_flag_cycler=0;		//Ñ­»·ÔËĞĞÍê±Ï±êÖ¾
+			scheduler.loop.check_flag_cycler=0;		//å¾ªç¯è¿è¡Œå®Œæ¯•æ ‡å¿—
 		}
  
 	}
 }
 
 
-//´ÎÓÅÏÈ¼¶ÈÎÎñ
-//ÉèÖÃÈÎÎñÓÅÏÈ¼¶
+//æ¬¡ä¼˜å…ˆçº§ä»»åŠ¡
+//è®¾ç½®ä»»åŠ¡ä¼˜å…ˆçº§
 #define OUTER_TASK_PRIO       			3
-//ÉèÖÃÈÎÎñ¶ÑÕ»´óĞ¡
+//è®¾ç½®ä»»åŠ¡å †æ ˆå¤§å°
 #define OUTER_STK_SIZE 				1024
-//ÈÎÎñ¶ÑÕ»
+//ä»»åŠ¡å †æ ˆ
 OS_STK OUTER_TASK_STK[OUTER_STK_SIZE];
-//ÈÎÎñº¯Êı
+//ä»»åŠ¡å‡½æ•°
 void  outer_task(void *pdata)
 {
 	while (1)
@@ -90,28 +91,28 @@ void  outer_task(void *pdata)
 }
 
 
-//START ÈÎÎñ
-//ÉèÖÃÈÎÎñÓÅÏÈ¼¶
-//#define START_TASK_PRIO      			10 //¿ªÊ¼ÈÎÎñµÄÓÅÏÈ¼¶ÉèÖÃÎª×îµÍ
-////ÉèÖÃÈÎÎñ¶ÑÕ»´óĞ¡
+//START ä»»åŠ¡
+//è®¾ç½®ä»»åŠ¡ä¼˜å…ˆçº§
+//#define START_TASK_PRIO      			10 //å¼€å§‹ä»»åŠ¡çš„ä¼˜å…ˆçº§è®¾ç½®ä¸ºæœ€ä½
+////è®¾ç½®ä»»åŠ¡å †æ ˆå¤§å°
 //#define START_STK_SIZE  				64
-////ÈÎÎñ¶ÑÕ»	
+////ä»»åŠ¡å †æ ˆ	
 OS_STK START_TASK_STK[START_STK_SIZE];
-//ÈÎÎñº¯Êı
+//ä»»åŠ¡å‡½æ•°
 void start_task(void *pdata)
 {
 	OS_CPU_SR cpu_sr = 0;
 	pdata = pdata;
-	sem_cyclest = OSSemCreate(0);		//´´½¨ĞÅºÅÁ¿
-	sem_cycler = OSSemCreate(0);		//´´½¨ĞÅºÅÁ¿
+	sem_cyclest = OSSemCreate(0);		//åˆ›å»ºä¿¡å·é‡
+	sem_cycler = OSSemCreate(0);		//åˆ›å»ºä¿¡å·é‡
 
 
-	OS_ENTER_CRITICAL();			//½øÈëÁÙ½çÇø(ÎŞ·¨±»ÖĞ¶Ï´ò¶Ï)    
+	OS_ENTER_CRITICAL();			//è¿›å…¥ä¸´ç•ŒåŒº(æ— æ³•è¢«ä¸­æ–­æ‰“æ–­)    
 	OSTaskCreate(cyclest_task, (void *)0, (OS_STK*)&CYCLEST_TASK_STK[CYCLEST_STK_SIZE - 1], CYCLEST_TASK_PRIO);
 	OSTaskCreate(cycler_task, (void *)0, (OS_STK*)&CYCLER_TASK_STK[CYCLER_STK_SIZE - 1], CYCLER_TASK_PRIO);
 	OSTaskCreate(outer_task, (void *)0, (OS_STK*)&OUTER_TASK_STK[OUTER_STK_SIZE - 1], OUTER_TASK_PRIO);
 
-	OSTaskSuspend(START_TASK_PRIO);	//¹ÒÆğÆğÊ¼ÈÎÎñ.
+	OSTaskSuspend(START_TASK_PRIO);	//æŒ‚èµ·èµ·å§‹ä»»åŠ¡.
 	OS_EXIT_CRITICAL();
 
 }
@@ -146,18 +147,18 @@ void Scheduler:: Loop_check()  //TIME INTTERRUPT
           // loop.cnt_100ms++;
         if( loop.check_flag_cyclest == 1)
         {
-        loop.err_flag ++;     //Ã¿ÀÛ¼ÓÒ»´Î£¬Ö¤Ã÷´úÂëÔÚÔ¤¶¨ÖÜÆÚÄÚÃ»ÓĞÅÜÍê¡£
+        loop.err_flag ++;     //æ¯ç´¯åŠ ä¸€æ¬¡ï¼Œè¯æ˜ä»£ç åœ¨é¢„å®šå‘¨æœŸå†…æ²¡æœ‰è·‘å®Œã€‚
         }
 	    else
         {	
-          loop.check_flag_cyclest = 1;	//¸Ã±êÖ¾Î»ÔÚÑ­»·µÄ×îºó±»ÇåÁã
+          loop.check_flag_cyclest = 1;	//è¯¥æ ‡å¿—ä½åœ¨å¾ªç¯çš„æœ€åè¢«æ¸…é›¶
           OSSemPost(sem_cyclest);
           
          
           
            if( loop.check_flag_cycler==0)
           {
-			  loop.check_flag_cycler= 1;	//¸Ã±êÖ¾Î»ÔÚÑ­»·µÄ×îºó±»ÇåÁã
+			  loop.check_flag_cycler= 1;	//è¯¥æ ‡å¿—ä½åœ¨å¾ªç¯çš„æœ€åè¢«æ¸…é›¶
 			  OSSemPost(sem_cycler);
 
           }
@@ -168,7 +169,7 @@ void Scheduler:: Loop_check()  //TIME INTTERRUPT
         
 }
 
-//ÑÏ¸ñÖÜÆÚÈÎÎñ
+//ä¸¥æ ¼å‘¨æœŸä»»åŠ¡
 void Scheduler::cyclest_loop()
 {
         if(loop.cnt_1ms>=1)
@@ -182,7 +183,7 @@ void Scheduler::cyclest_loop()
 
 
 		loop.cnt_3ms = 0;
-		cyclest_Duty_3ms();			//ÖÜÆÚ5msµÄÈÎÎñ
+		cyclest_Duty_3ms();			//å‘¨æœŸ5msçš„ä»»åŠ¡
 	}
 
 	if (loop.cnt_5ms >= 5)
@@ -190,14 +191,14 @@ void Scheduler::cyclest_loop()
 
 
 		loop.cnt_5ms = 0;
-		cyclest_Duty_5ms();			//ÖÜÆÚ5msµÄÈÎÎñ
+		cyclest_Duty_5ms();			//å‘¨æœŸ5msçš„ä»»åŠ¡
 	}
         if (loop.cnt_10ms >= 10)
 	{
 
 
 		loop.cnt_10ms = 0;
-                cyclest_Duty_10ms();			//ÖÜÆÚ10msµÄÈÎÎñ
+                cyclest_Duty_10ms();			//å‘¨æœŸ10msçš„ä»»åŠ¡
 		 
 	}
         if (loop.cnt_20ms >= 20)
@@ -205,14 +206,14 @@ void Scheduler::cyclest_loop()
           
           
                 loop.cnt_20ms = 0;
-                cyclest_Duty_20ms();			//ÖÜÆÚ5msµÄÈÎÎñ
+                cyclest_Duty_20ms();			//å‘¨æœŸ5msçš„ä»»åŠ¡
 	}
         if (loop.cnt_50ms >= 50)
 	{
           
           
           loop.cnt_50ms = 50;
-          cyclest_Duty_50ms();			//ÖÜÆÚ5msµÄÈÎÎñ
+          cyclest_Duty_50ms();			//å‘¨æœŸ5msçš„ä»»åŠ¡
 	}
 }
 
@@ -230,7 +231,7 @@ void Scheduler::cycler_loop()
 
 
 		loop2.cnt_3ms = 0;
-		cycler_Duty_3ms();			//ÖÜÆÚ5msµÄÈÎÎñ
+		cycler_Duty_3ms();			//å‘¨æœŸ5msçš„ä»»åŠ¡
 	}
 
 	if (loop2.cnt_5ms >= 5)
@@ -238,14 +239,14 @@ void Scheduler::cycler_loop()
 
 
 		loop2.cnt_5ms = 0;
-		cycler_Duty_5ms();			//ÖÜÆÚ5msµÄÈÎÎñ
+		cycler_Duty_5ms();			//å‘¨æœŸ5msçš„ä»»åŠ¡
 	}
         if (loop2.cnt_10ms >= 10)
 	{
 
 
 		loop2.cnt_10ms = 0;
-                cycler_Duty_10ms();			//ÖÜÆÚ10msµÄÈÎÎñ
+                cycler_Duty_10ms();			//å‘¨æœŸ10msçš„ä»»åŠ¡
 		 
 	}
         if (loop2.cnt_20ms >= 20)
@@ -253,14 +254,14 @@ void Scheduler::cycler_loop()
           
           
                 loop2.cnt_20ms = 0;
-                cycler_Duty_20ms();			//ÖÜÆÚ5msµÄÈÎÎñ
+                cycler_Duty_20ms();			//å‘¨æœŸ5msçš„ä»»åŠ¡
 	}
         if (loop2.cnt_50ms >= 50)
 	{
           
           
           loop2.cnt_50ms = 50;
-          cycler_Duty_50ms();			//ÖÜÆÚ5msµÄÈÎÎñ
+          cycler_Duty_50ms();			//å‘¨æœŸ5msçš„ä»»åŠ¡
 	}
 	
 
@@ -317,19 +318,19 @@ void Scheduler::cycler_Duty_50ms()
         
 }
 
-//ÑÏ¸ñÖÜÆÚ
+//ä¸¥æ ¼å‘¨æœŸ
 void Scheduler::cyclest_Duty_1ms()
 {
 
 	float data_time1 = time.Get_Cycle_T(0);
-	/*-------DMAÍê³Éºó¶Ô¶ÁÈ¡Êı¾İ½øĞĞ´¦Àí------*/
+	/*-------DMAå®Œæˆåå¯¹è¯»å–æ•°æ®è¿›è¡Œå¤„ç†------*/
 	if (ahrs. mpu_data_ok == 1)
 	{
 		ahrs.mpu_data_ok = 0;
-		 ahrs.ahrs_Data_Prepare (data_time1);			//mpu6Öá´«¸ĞÆ÷Êı¾İ´¦Àí
+		 ahrs.ahrs_Data_Prepare (data_time1);			//mpu6è½´ä¼ æ„Ÿå™¨æ•°æ®å¤„ç†
 		 mag_s.Read_Mag_Data();
 	}
-	/*-------ÔÚÕâÀï´ò¿ªDMA------*/
+	/*-------åœ¨è¿™é‡Œæ‰“å¼€DMA------*/
 	ahrs.MPU_READ_INITIAL_DATA();
 	 
 
@@ -373,14 +374,17 @@ void Scheduler::cyclest_Duty_5ms()
 void Scheduler::cyclest_Duty_10ms()
 {
            
-        
+      if (MS5611_Update()) 				//Â¸Ã¼ÃÃ‚ms5611Ã†Ã¸Ã‘Â¹Â¼Ã†ÃŠÃ½Â¾Ã
+	{
+	 ;  //20ms
+	}  
 }
 
 
 void Scheduler::cyclest_Duty_20ms()
 {
-           
-        
+	 
+	
 }
 
 void Scheduler::cyclest_Duty_50ms()
