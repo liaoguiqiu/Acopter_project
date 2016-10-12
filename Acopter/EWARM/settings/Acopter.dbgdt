@@ -39,7 +39,7 @@
           
           
           
-        <item>Rc_Pwm_In</item><item>time</item><item>rc</item><item>ctrl_s</item><item>ahrs</item><item>mag_s</item><item>flash_save</item><item>baroAlt</item><item>p_rxbuf</item><item>ReceiveByte</item><item>p_rxbuf</item><item>baroAlt</item><item>ms5611_prom</item><item>pressure</item><item>temperature_5611</item><item></item></expressions>
+        <item>Rc_Pwm_In</item><item>time</item><item>rc</item><item>ctrl_s</item><item>ahrs</item><item>mag_s</item><item>flash_save</item><item>baroAlt</item><item>p_rxbuf</item><item>ReceiveByte</item><item>p_rxbuf</item><item>baroAlt</item><item>ms5611_prom</item><item>pressure</item><item>temperature_5611</item><item/></expressions>
         <col-names>
           
           
@@ -53,7 +53,7 @@
           
         <item>170</item><item>150</item><item>100</item><item>259</item></col-widths>
       </StaticWatch>
-    <WATCH_1><expressions><item>ReceiveByte</item><item></item></expressions><col-names><item>Expression</item><item>Location</item><item>Type</item><item>Value</item></col-names><col-widths><item>100</item><item>150</item><item>100</item><item>100</item></col-widths></WATCH_1></Static>
+    <WATCH_1><expressions><item>ReceiveByte</item><item/></expressions><col-names><item>Expression</item><item>Location</item><item>Type</item><item>Value</item></col-names><col-widths><item>100</item><item>150</item><item>100</item><item>100</item></col-widths></WATCH_1></Static>
     <Windows>
       
       
