@@ -2,7 +2,8 @@
 #include "ctrl.h"
 #include "magnet.h"
 #include "filter.h"
-
+#include "rc.h"
+#include "height_ctrl.h"
 IMU_DCM imu_dcm;
 
 void IMU_DCM:: IMUupdate(float half_T, float gx, float gy, float gz, float ax, float ay, float az, float *rol, float *pit, float *yaw)
@@ -24,7 +25,7 @@ void IMU_DCM:: IMUupdate(float half_T, float gx, float gy, float gz, float ax, f
 		mag_tmp.z += mag_norm_tmp *((float)mag_s.Mag_Val.z / (mag_norm_xyz)-mag_tmp.z);
 	}
 
-	simple_3d_trans(&reference_v, &mag_tmp, &mag_sim_3d);
+	filter.simple_3d_trans(&reference_v, &mag_tmp, &mag_sim_3d);
 
 	mag_norm = my_sqrt(mag_sim_3d.x * mag_sim_3d.x + mag_sim_3d.y *mag_sim_3d.y);
 
@@ -97,7 +98,7 @@ void IMU_DCM:: IMUupdate(float half_T, float gx, float gy, float gz, float ax, f
 	if (reference_v.z > 0.0f)
 	{
 
-		if (ctrl_s.thr>470  )
+		if (ctrl_s.thr>THR_BEFOR_FLY_UP )
 		{
 			yaw_correct = Kp *0.0f *To_180_degrees(yaw_mag - Yaw);
 			//已经解锁，只需要低速纠正。

@@ -40,7 +40,7 @@ class flash_save_para
 public:
 	uint8_t save_arry[max_flash_save_len];
 	uint8_t save_on;
-
+	short save_time;
 	flash_save_para()
 	{
 		save_on = 0;

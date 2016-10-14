@@ -152,6 +152,9 @@ void AHRS_S:: MPU9250_Init(SPI_HandleTypeDef *hspi) {
 		{ 0x0E, MPU6500_ACCEL_CONFIG_2 }, // default : LPS_10Hz 1101
 		{ 0x40, MPU6500_I2C_MST_CTRL },
 		{ 0x35, MPU6500_USER_CTRL }, // Set I2C_MST_EN, I2C_IF_DIS
+                
+                
+                
 	};
 
 	for (i = 0; i < MPU9250_InitRegNum; i++) {
@@ -267,6 +270,35 @@ void AHRS_S:: MPU_READ_INITIAL_DATA(void)
 
 
 
+}
+
+
+ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
+ {
+    if (hspi->Instance == hspi3.Instance) 
+        {
+ 
+      ahrs.initial_data_filed();
+          
+	}
+ 
+ 
+ }
+
+
+
+
+
+
+
+void AHRS_S:: initial_data_filed()
+{
+ 
+
+		ahrs. mpu_data_ok = 1;
+		MPU9250_OFF;
+
+	 
 }
 
 void AHRS_S:: Transform(float itx, float ity, float itz, float *it_x, float *it_y, float *it_z)
@@ -450,22 +482,3 @@ void  AHRS_S:: ahrs_data_filt(float T)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-void AHRS_S:: initial_data_filed()
-{
- 
-
-		ahrs. mpu_data_ok = 1;
-		MPU9250_OFF;
-
-	 
-}

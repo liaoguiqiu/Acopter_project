@@ -7,6 +7,9 @@
 #define ULTRA_INT        600    // ????
 #define BARO_SPEED_NUM 100
 #define EXP_Z_SPEED  ( 4.0f *my_deathzoom( (thr-450), 50 ) )
+#define THR_BEFOR_FLY_UP  350
+
+
 
 typedef struct
 {
@@ -45,7 +48,8 @@ public:
 
 	float height_ctrl_out;
 	float wz_acc;
-
+	float z_speed;
+	float z_height, z_height_old;
 
 	float wz_speed, wz_speed_old;
 	  char   ultra_error;
@@ -73,11 +77,13 @@ public:
 	
 	    HLT_CTRL( )
 	  {
-		  ULTRA_MAX_HEIGHT = 700;
+		  ULTRA_MAX_HEIGHT = 500;
 	  
 	  }
 
 
+		void height_ctrl_outer(float T, float thr, float height,float speed);
+	
 	  void Height_Ctrl(float T, float thr);
 
 	  void Ultra_PID_Init(void);
@@ -95,6 +101,8 @@ public:
 	  float self_land_ctrl(void);
 	  float self_fly_up_ctrl(void);
 
+	  /*---------与高度传感器融合得到高度、速度--------*/
+	  void speed_height_caculate_with_sensor(float T, float sensor_height, float sensor_speed);
 
 private:
 

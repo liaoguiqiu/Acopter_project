@@ -7,11 +7,13 @@
 class LED
 {
 public:
-
+	short on_time;
+	short off_time;
 	void led_change();
 
 
 	void led_state0();
+	void led_state2();
 	void led_state1();
 	 LED()
          {

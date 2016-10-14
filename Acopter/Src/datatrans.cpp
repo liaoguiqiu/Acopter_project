@@ -4,7 +4,7 @@
 #include "magnet.h"
 #include "flash.h"
 #include "baro.h"
-
+#include "height_ctrl.h"
 
 #define BYTE0(dwTemp)       ( *( (char *)(&dwTemp)		) )
 #define BYTE1(dwTemp)       ( *( (char *)(&dwTemp) + 1) )
@@ -16,11 +16,17 @@ Datatrans data_trans;
 
 void Datatrans:: send_all_fly_data_to_ANO(void)
 {
-	send_15_data((s16)1, (s16)ctrl_s.motor[1], (s16)ctrl_s.motor[2],
-		(s16)ctrl_s.motor[3], (s16)ctrl_s.except_AS.y, (s16)ctrl_s.except_AS.z,
-		(s16)ahrs.Gyro_deg.x, (s16)ahrs.Gyro_deg.y, (s16)ahrs.Gyro_deg.z,
+	send_15_data((s16)ctrl_s.ctrl_2.err_d.x, (s16)ctrl_s.ctrl_1.damp.x, (s16)ctrl_s.ctrl_1.err_d.x,
+		(s16)ctrl_s. ctrl_2.out.x, (s16)ahrs.Gyro_deg.y, (s16)ahrs.Gyro_deg.z,
+		(s16)ctrl_s.ctrl_1.out.x, (s16)ctrl_s.ctrl_1.out.y, (s16)ctrl_s.ctrl_1.out.z,
 		(float) imu_dcm.Roll, (float) imu_dcm.Pitch, (float) imu_dcm.Yaw,
 		(s32) 0, (u8) 0, (u8) 0);
+
+	//send_15_data((s16)hlt_ctl.ultra_ctrl_out, (s16)baro.high_filed, (s16)baro.baro_alt_speed,
+	//	(s16)baro.speed_filed, (s16)hlt_ctl.wz_speed, (s16)hlt_ctl.z_height,
+	//	(s16)ctrl_s.thr, (s16)hlt_ctl.exp_height, (s16)ctrl_s.thr_value,
+	//	(float)imu_dcm.Roll, (float)imu_dcm.Pitch, (float)imu_dcm.Yaw,
+	//	(s32)0, (u8)0, (u8)0);
 }
 void Datatrans:: acopter_Send_Data(u8 *dataToSend , u8 length)
 {
@@ -233,9 +239,9 @@ void  Datatrans::data_trans_with_ano()
 		{
 
 
-			ANO_DT_Send_PID(3, ctrl_s.ctrl_2.PID[PIDROLL].kp, ctrl_s.ctrl_2.PID[PIDROLL].ki, ctrl_s.ctrl_2.PID[PIDROLL].kd,
-				ctrl_s.ctrl_2.PID[PIDPITCH].kp, ctrl_s.ctrl_2.PID[PIDPITCH].ki, ctrl_s.ctrl_2.PID[PIDPITCH].kd,
-				ctrl_s.ctrl_2.PID[PIDYAW].kp, ctrl_s.ctrl_2.PID[PIDYAW].ki, ctrl_s.ctrl_2.PID[PIDYAW].kd);
+			ANO_DT_Send_PID(3, hlt_ctl.ultra_pid.kp, hlt_ctl.ultra_pid.ki, hlt_ctl.ultra_pid.kd,
+				hlt_ctl.wz_speed_pid.kp, hlt_ctl.wz_speed_pid.ki, hlt_ctl.wz_speed_pid.kd,
+				0, 0, 0);
 			 send_pid_para++;
 			return;
 
@@ -434,6 +440,12 @@ void Datatrans:: ANO_DT_Data_Receive_Anl(u8 *data_buf, u8 num)
 	}
 	if (*(data_buf + 2) == 0X12)								//PID3
 	{
+		hlt_ctl.ultra_pid.kp = 0.001*((short)(*(data_buf + 4) << 8) | *(data_buf + 5));
+		hlt_ctl.ultra_pid.ki = 0.001*((short)(*(data_buf + 6) << 8) | *(data_buf + 7));
+		hlt_ctl.ultra_pid.kd = 0.001*((short)(*(data_buf + 8) << 8) | *(data_buf + 9));
+		hlt_ctl.wz_speed_pid.kp = 0.001*((short)(*(data_buf + 10) << 8) | *(data_buf + 11));
+		hlt_ctl.wz_speed_pid.ki = 0.001*((short)(*(data_buf + 12) << 8) | *(data_buf + 13));
+		hlt_ctl.wz_speed_pid.kd = 0.001*((short)(*(data_buf + 14) << 8) | *(data_buf + 15));
 		 	ANO_DT_Send_Check(*(data_buf + 2), sum);
 		//PID_Para_Init();
 		//flash_save_en_cnt = 1;

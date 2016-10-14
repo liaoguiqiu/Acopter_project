@@ -8,8 +8,8 @@
 **********************************************************************************/
 #include "i2c_soft.h"
 
-
-void I2c_Soft_delay()
+I2c_SOFT i2c_soft;
+void I2c_SOFT:: I2c_Soft_delay()
 { 
 	 
 	
@@ -20,11 +20,11 @@ void I2c_Soft_delay()
 	 
 }
 
-void I2c_Soft_Init()
+void I2c_SOFT::I2c_Soft_Init()
 { 
 }
 
-int I2c_Soft_Start()
+int I2c_SOFT::I2c_Soft_Start()
 {
 	SDA_H;
 	SCL_H;
@@ -39,7 +39,7 @@ int I2c_Soft_Start()
 
 }
 
-void I2c_Soft_Stop()
+void I2c_SOFT::I2c_Soft_Stop()
 {
 	SCL_L;
 	I2c_Soft_delay();
@@ -51,7 +51,7 @@ void I2c_Soft_Stop()
 	I2c_Soft_delay();
 }
 
-void I2c_Soft_Ask()
+void I2c_SOFT::I2c_Soft_Ask()
 {
 	SCL_L;
 	I2c_Soft_delay();
@@ -63,7 +63,7 @@ void I2c_Soft_Ask()
 	I2c_Soft_delay();
 }
 
-void I2c_Soft_NoAsk()
+void I2c_SOFT::I2c_Soft_NoAsk()
 {
 	SCL_L;
 	I2c_Soft_delay();
@@ -75,7 +75,7 @@ void I2c_Soft_NoAsk()
 	I2c_Soft_delay();
 }
 
-int I2c_Soft_WaitAsk(void) 	 //返回为:=1无ASK,=0有ASK
+int I2c_SOFT::I2c_Soft_WaitAsk(void) 	 //返回为:=1无ASK,=0有ASK
 {
   u8 ErrTime = 0;
 	SCL_L;
@@ -98,7 +98,7 @@ int I2c_Soft_WaitAsk(void) 	 //返回为:=1无ASK,=0有ASK
 	return 0;
 }
 
-void I2c_Soft_SendByte(u8 SendByte) //数据从高位到低位//
+void I2c_SOFT::I2c_Soft_SendByte(u8 SendByte) //数据从高位到低位//
 {
     u8 i=8;
     while(i--)
@@ -118,7 +118,7 @@ void I2c_Soft_SendByte(u8 SendByte) //数据从高位到低位//
 }  
 
 //读1个字节，ack=1时，发送ACK，ack=0，发送NACK
-u8 I2c_Soft_ReadByte(u8 ask)  //数据从高位到低位//
+u8 I2c_SOFT::I2c_Soft_ReadByte(u8 ask)  //数据从高位到低位//
 { 
     u8 i=8;
     u8 ReceiveByte=0;
@@ -148,7 +148,7 @@ u8 I2c_Soft_ReadByte(u8 ask)  //数据从高位到低位//
 
 
 // IIC写一个字节数据
-u8 IIC_Write_1Byte(u8 SlaveAddress,u8 REG_Address,u8 REG_data)
+u8 I2c_SOFT::IIC_Write_1Byte(u8 SlaveAddress, u8 REG_Address, u8 REG_data)
 {
 	I2c_Soft_Start();
 	I2c_Soft_SendByte(SlaveAddress<<1);   
@@ -166,7 +166,7 @@ u8 IIC_Write_1Byte(u8 SlaveAddress,u8 REG_Address,u8 REG_data)
 }
 
 // IIC读1字节数据
-u8 IIC_Read_1Byte(u8 SlaveAddress,u8 REG_Address,u8 *REG_data)
+u8 I2c_SOFT::IIC_Read_1Byte(u8 SlaveAddress, u8 REG_Address, u8 *REG_data)
 {      		
 	I2c_Soft_Start();
 	I2c_Soft_SendByte(SlaveAddress<<1); 
@@ -186,7 +186,7 @@ u8 IIC_Read_1Byte(u8 SlaveAddress,u8 REG_Address,u8 *REG_data)
 }	
 
 // IIC写n字节数据
-u8 IIC_Write_nByte(u8 SlaveAddress, u8 REG_Address, u8 len, u8 *buf)
+u8 I2c_SOFT::IIC_Write_nByte(u8 SlaveAddress, u8 REG_Address, u8 len, u8 *buf)
 {	
 	I2c_Soft_Start();
 	I2c_Soft_SendByte(SlaveAddress<<1); 
@@ -207,7 +207,7 @@ u8 IIC_Write_nByte(u8 SlaveAddress, u8 REG_Address, u8 len, u8 *buf)
 }
 
 // IIC读n字节数据
-u8 IIC_Read_nByte(u8 SlaveAddress, u8 REG_Address, u8 len, u8 *buf)
+u8 I2c_SOFT::IIC_Read_nByte(u8 SlaveAddress, u8 REG_Address, u8 len, u8 *buf)
 {	
 	I2c_Soft_Start();
 	I2c_Soft_SendByte(SlaveAddress<<1); 

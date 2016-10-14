@@ -1,11 +1,11 @@
 //#include "include.h"
 #include "filter.h"
 #include "mymath.h"
-
+Myfilt filter;
 // #define WIDTH_NUM 101
 // #define FIL_ITEM  10
 
-void Moving_Average(float in, float moavarray[], u16 len, u16 fil_cnt[2], float *out)
+void Myfilt:: Moving_Average(float in, float moavarray[], u16 len, u16 fil_cnt[2], float *out)
 {
 	u16 width_num;
 
@@ -29,16 +29,7 @@ void Moving_Average(float in, float moavarray[], u16 len, u16 fil_cnt[2], float 
  
 
 
-
-#define MED_WIDTH_NUM 11
-#define MED_FIL_ITEM  7
-
-float med_filter_tmp[MED_FIL_ITEM][MED_WIDTH_NUM];
-float med_filter_out[MED_FIL_ITEM];
-
-u8 med_fil_cnt[MED_FIL_ITEM];
-
-float Moving_Median(u8 item, u8 width_num, float in)
+float Myfilt::Moving_Median(u8 item, u8 width_num, float in)
 {
 	u8 i, j;
 	float t;
@@ -80,7 +71,7 @@ float Moving_Median(u8 item, u8 width_num, float in)
 	}
 }
 
-float Moving_Median_ae(u8 item, u8 width_num, float in)
+float Myfilt::Moving_Median_ae(u8 item, u8 width_num, float in)
 {
 	u8 i, j;
 	float t;
@@ -134,7 +125,7 @@ float Moving_Median_ae(u8 item, u8 width_num, float in)
 
 
 
-void simple_3d_trans(Vector3f *ref, Vector3f*in, Vector3f *out) //小范围内正确。
+void Myfilt::simple_3d_trans(Vector3f *ref, Vector3f*in, Vector3f *out) //小范围内正确。
 {
 	static s8 pn;
 	static float h_tmp_x, h_tmp_y;

@@ -14,7 +14,7 @@
 
 #define OFFSET_AV_NUM 1000
 #define FILTER_NUM_A 40
-#define FILTER_NUM_G 5
+#define FILTER_NUM_G 10
 
 /*---------mpu驱动----------*/
 
@@ -200,7 +200,7 @@ public:
 	char mpu_data_ok;
 
 	int sum_temp[7];
-	  uint8_t buffer[22];//9250原始数据      
+	  uint8_t buffer[28];//9250原始数据      
 	  int16_t RAWData[11];
 	  short  gyro_sum_cnt;
 	  short acc_sum_cnt;
@@ -250,6 +250,8 @@ public:
 	void ahrs_Data_Offset(); //校准函数
 	void initial_data_filed();
 	void ahrs_data_filt(float T);
+        
+         void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi);
 private:
 
 };

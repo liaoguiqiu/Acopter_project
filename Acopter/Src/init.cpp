@@ -24,7 +24,7 @@ void All_Init()
         parameter.Para_Init();
         
         /*-----ÆøÑ¹¼Æ-------*/
-		MS5611_Init();
+		baro.MS5611_Init();
 	//	baro.MS5611_Init();
         /*---ÍÓÂÝÒÇ----*/
         ahrs. MPU9250_Init(&hspi3);

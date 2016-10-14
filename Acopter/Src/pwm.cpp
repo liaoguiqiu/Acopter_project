@@ -1,8 +1,8 @@
 #include "pwm.h"
 #include "rc.h"
 //·­×ªÊ±¼ä
-#define PWM_FULL_TIME 1800
-#define MOTOR_STOP_TIME 1000
+#define PWM_FULL_TIME 1900
+#define MOTOR_STOP_TIME 1100
 
 
 void SetPwm(int16_t pwm[], s16 min, s16 max)

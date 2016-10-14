@@ -2,6 +2,8 @@
 #include "delay.h"
 #include "i2c_soft.h" 
 #include "sys.h"
+#include "filter.h"
+
 
 BARO baro;
  
@@ -9,20 +11,12 @@ BARO baro;
 
 #define BARO_CAL_CNT 200
 
-int32_t baroAlt, baroAltOld;
-float baro_alt_speed;
-int32_t baro_Offset;
-uint32_t ms5611_ut;  // static result of temperature measurement
-uint32_t ms5611_up;  // static result of pressure measurement
-uint16_t ms5611_prom[PROM_NB];  // on-chip ROM
-uint8_t t_rxbuf[3], p_rxbuf[3];
-
-void MS5611_Reset(void)
+void BARO::MS5611_Reset(void)
 {
-	IIC_Write_1Byte(MS5611_ADDR, CMD_RESET, 1);
+   i2c_soft.IIC_Write_1Byte(MS5611_ADDR, CMD_RESET, 1);
 }
 
-u8 MS5611_Read_Prom(void)
+u8 BARO::MS5611_Read_Prom(void)
 {
 	uint8_t rxbuf[2] = { 0, 0 };
 	u8 check = 0;
@@ -30,7 +24,7 @@ u8 MS5611_Read_Prom(void)
 
 	for (i = 0; i < PROM_NB; i++)
 	{
-		check += IIC_Read_nByte(MS5611_ADDR, CMD_PROM_RD + i * 2, 2, rxbuf); // send PROM READ command
+		check += i2c_soft.IIC_Read_nByte(MS5611_ADDR, CMD_PROM_RD + i * 2, 2, rxbuf); // send PROM READ command
 		ms5611_prom[i] = rxbuf[0] << 8 | rxbuf[1];
 	}
 
@@ -41,28 +35,28 @@ u8 MS5611_Read_Prom(void)
 }
 
 
-void MS5611_Read_Adc_T(void)
+void BARO::MS5611_Read_Adc_T(void)
 {
-	IIC_Read_nByte(MS5611_ADDR, CMD_ADC_READ, 3, t_rxbuf); // read ADC
+	i2c_soft.IIC_Read_nByte(MS5611_ADDR, CMD_ADC_READ, 3, t_rxbuf); // read ADC
 }
 
-void MS5611_Read_Adc_P(void)
+void  BARO::MS5611_Read_Adc_P(void)
 {
-	IIC_Read_nByte(MS5611_ADDR, CMD_ADC_READ, 3, p_rxbuf); // read ADC
+	i2c_soft.IIC_Read_nByte(MS5611_ADDR, CMD_ADC_READ, 3, p_rxbuf); // read ADC
 }
 
-void MS5611_Start_T(void)
+void  BARO::MS5611_Start_T(void)
 {
-	IIC_Write_1Byte(MS5611_ADDR, CMD_ADC_CONV + CMD_ADC_D2 + MS5611_OSR, 1); // D2 (temperature) conversion start!
+	i2c_soft.IIC_Write_1Byte(MS5611_ADDR, CMD_ADC_CONV + CMD_ADC_D2 + MS5611_OSR, 1); // D2 (temperature) conversion start!
 }
 
-void MS5611_Start_P(void)
+void  BARO::MS5611_Start_P(void)
 {
-	IIC_Write_1Byte(MS5611_ADDR, CMD_ADC_CONV + CMD_ADC_D1 + MS5611_OSR, 1); // D1 (pressure) conversion start!
+	i2c_soft.IIC_Write_1Byte(MS5611_ADDR, CMD_ADC_CONV + CMD_ADC_D1 + MS5611_OSR, 1); // D1 (pressure) conversion start!
 }
 
 u8 ms5611_ok;
-void MS5611_Init(void)
+void  BARO::MS5611_Init(void)
 {
 
 	delay_ms(10);
@@ -74,7 +68,7 @@ void MS5611_Init(void)
 	MS5611_Start_T();
 }
 
-int MS5611_Update(void)
+int  BARO::MS5611_Update(void)
 {
 	static int state = 0;
 
@@ -96,13 +90,15 @@ int MS5611_Update(void)
 	return (state);
 }
 
-float temperature_5611;
-void MS5611_BaroAltCalculate(void)
+
+void  BARO::MS5611_BaroAltCalculate(void)
 {
+
+  float baro_T=	time.Get_Cycle_T(3);
 	static u8 baro_start;
 
 	int32_t temperature, off2 = 0, sens2 = 0, delt;
-	static float pressure;
+	
 	float alt_3;
 
 	int32_t dT;
@@ -110,7 +106,7 @@ void MS5611_BaroAltCalculate(void)
 	int64_t sens;
 
 	static int32_t sum_tmp_5611 = 0;
-	static u8 sum_cnt = BARO_CAL_CNT + 10;
+	
 
 	ms5611_ut = (t_rxbuf[0] << 16) | (t_rxbuf[1] << 8) | t_rxbuf[2];
 	ms5611_up = (p_rxbuf[0] << 16) | (p_rxbuf[1] << 8) | p_rxbuf[2];
@@ -139,6 +135,8 @@ void MS5611_BaroAltCalculate(void)
 
 	alt_3 = (101000 - pressure) / 1000.0f;
 	pressure = (0.0082f *alt_3 * alt_3 *alt_3 + 0.09f *(101000 - pressure)*100.0f);
+	
+	
 	// - ( temperature_5611  ) *650 *(pressure/101000.0);
 
 	// 		if( pressure < 101000 )
@@ -156,31 +154,64 @@ void MS5611_BaroAltCalculate(void)
 
 
 
-	baroAlt = 10 * (0.1f *(pressure - baro_Offset)); //cm
-	baro_alt_speed += 5 * 0.02 *3.14 *(50 * (baroAlt - baroAltOld) - baro_alt_speed); // 20ms Ò»´Î /0.02 = *50 µ¥Î»cm/s
+	baroAlt = (int)(10 * (0.1f *(pressure - offset))); //cm
 
-	baroAltOld = baroAlt;
+	//baro_alt_speed = (baroAlt - baroAltOld)/baro_T; // 20ms Ò»´Î /0.02 = *50 µ¥Î»cm/s
+	height_speed_filter(baro_T);
+	//baroAltOld = baroAlt;
 
 	if (baro_start < 100)
 	{
+		CALL_OFFSET = 1;
 		baro_start++;
 		baro_alt_speed = 0;
 		baroAlt = 0;
 	}
 
-	if (sum_cnt)
-	{
-		sum_cnt--;
-		// 			if(sum_cnt < BARO_CAL_CNT)
-		// 				sum_tmp_5611 += pressure;
-		// 			if(sum_cnt==0)
-		// 				baro_Offset = sum_tmp_5611 / (BARO_CAL_CNT - 1);
-	}
+	 
 
 	temperature_5611 += 0.01f *((0.01f *temperature) - temperature_5611);
+	/*----------获得气压计偏移量--------*/
+	call_offset();
 }
 
-int32_t MS5611_Get_BaroAlt(void)
+void BARO:: height_speed_filter(float T)
+{
+  
+  	   float high_filed_hz = 1;
+	   float speed_filed_hz = 1;
+
+
+	baroAlt = baroAlt * 10;//mm
+	
+	high_filed += (1 / (1 + 1 / (high_filed_hz * 3.14f *T)))*(baroAlt - high_filed);
+	filter.Moving_Average(high_filed, h_filt_buff, BARO_fil_NUM, h_filt_cnt, &high_filed);
+	
+
+	baro_alt_speed = (high_filed - baroAltOld)/T;//mm
+	speed_filed += (1 / (1 + 1 / (speed_filed_hz * 3.14f *T)))*(baro_alt_speed - speed_filed);
+
+	//filter.Moving_Average(baro_alt_speed, speed_filt_buff, BARO_speed_fil_NUM, speed_filt_cnt, &speed_filed);
+	baroAltOld = high_filed;
+}
+int32_t  BARO::MS5611_Get_BaroAlt(void)
 {
 	return baroAlt;
+}
+void BARO:: call_offset(void)
+{
+	if (CALL_OFFSET)
+	{
+		sum_cnt++;
+		offset_sum += pressure;
+		if (sum_cnt >= BARO_CALL_OFF_SET_TIME)
+		{
+			offset = offset_sum / BARO_CALL_OFF_SET_TIME;
+			sum_cnt = 0;
+			CALL_OFFSET = 0;
+			offset_sum = 0;
+		}
+
+	}
+
 }

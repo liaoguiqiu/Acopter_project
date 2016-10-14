@@ -14,6 +14,7 @@
 #include "parameter.h"
 #include "ctrl.h"
 #include  "led.h"
+#include "height_ctrl.h"
 #include "baro.h"
 Scheduler scheduler;
 
@@ -353,6 +354,8 @@ void Scheduler::cyclest_Duty_3ms()
 
 	rc.RC_Duty(data_time3, Rc_Pwm_In);
 	
+	hlt_ctl.speed_height_caculate_with_sensor(data_time3, baro.high_filed, baro.speed_filed);
+	
 	ctrl_s.CTRL_1(data_time3);
 		
         
@@ -374,7 +377,7 @@ void Scheduler::cyclest_Duty_5ms()
 void Scheduler::cyclest_Duty_10ms()
 {
            
-      if (MS5611_Update()) 				//¸üÐÂms5611ÆøÑ¹¼ÆÊý¾Ý
+      if (baro. MS5611_Update()) 				//¸üÐÂms5611ÆøÑ¹¼ÆÊý¾Ý
 	{
 	 ;  //20ms
 	}  
@@ -402,6 +405,12 @@ void Scheduler:: check_flash_save()
 	{
 		flash_save.save_on = 0;
 		flash_save.flash_save_parameters(); 
+		flash_save.save_time = 100;
 	}
+	if (flash_save.save_time)
+	{
+		flash_save.save_time--;
+	}
+
 
 }

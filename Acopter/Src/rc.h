@@ -38,6 +38,7 @@ public:
   
   
   //·½·¨
+  void mode_switch(void);
   void CH_Mapping_Fun(u16 *in, u16 *Mapped_CH);
   void Fly_Ready(float T);
   void RC_Duty(float, u16 *);

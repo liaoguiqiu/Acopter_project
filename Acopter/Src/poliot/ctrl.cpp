@@ -2,7 +2,7 @@
 #include "AHRS.h"
 #include "rc.h"
 #include "pwm.h"
-
+#include "height_ctrl.h"
 CTRL_S ctrl_s;
 
 
@@ -119,8 +119,8 @@ void CTRL_S:: CTRL_1(float T)  //x roll,y pitch,z yaw
 	Vector3f EXP_LPF_TMP;
 	/* 给期望（目标）角速度 */
 	EXP_LPF_TMP.x = MAX_CTRL_ASPEED *(ctrl_2.out.x / ANGLE_TO_MAX_AS);//*( (CH_filter[0])/500.0f );//
-	EXP_LPF_TMP.y = -MAX_CTRL_ASPEED *(ctrl_2.out.y / ANGLE_TO_MAX_AS);//*( (CH_filter[1])/500.0f );//
-	EXP_LPF_TMP.z = -MAX_CTRL_ASPEED *(ctrl_2.out.z / ANGLE_TO_MAX_AS);
+	EXP_LPF_TMP.y = MAX_CTRL_ASPEED *(ctrl_2.out.y / ANGLE_TO_MAX_AS);//*( (CH_filter[1])/500.0f );//
+	EXP_LPF_TMP.z = MAX_CTRL_ASPEED *(ctrl_2.out.z / ANGLE_TO_MAX_AS);
 
 	except_AS.x = EXP_LPF_TMP.x;//20 *3.14 *T *( EXP_LPF_TMP.x - except_AS.x );//
 	except_AS.y = EXP_LPF_TMP.y;//20 *3.14 *T *( EXP_LPF_TMP.y - except_AS.y );//
@@ -132,12 +132,12 @@ void CTRL_S:: CTRL_1(float T)  //x roll,y pitch,z yaw
 
 	/* 角速度直接微分（角加速度），负反馈可形成角速度的阻尼（阻碍角速度的变化）*/
 	ctrl_1.damp.x = (ahrs.Gyro_deg.x - g_old[A_X]) *(0.002f / T);//ctrl_1.PID[PIDROLL].kdamp
-	ctrl_1.damp.y = (ahrs.Gyro_deg.y - g_old[A_Y]) *(0.002f / T);//ctrl_1.PID[PIDPITCH].kdamp *
-	ctrl_1.damp.z = (ahrs.Gyro_deg.z - g_old[A_Z]) *(0.002f / T);//ctrl_1.PID[PIDYAW].kdamp	 *
+	ctrl_1.damp.y = (-ahrs.Gyro_deg.y - g_old[A_Y]) *(0.002f / T);//ctrl_1.PID[PIDPITCH].kdamp *
+	ctrl_1.damp.z = (-ahrs.Gyro_deg.z - g_old[A_Z]) *(0.002f / T);//ctrl_1.PID[PIDYAW].kdamp	 *
 	/* 角速度误差 */
 	ctrl_1.err.x = (except_AS.x - ahrs.Gyro_deg.x) *(300.0f / MAX_CTRL_ASPEED);
-	ctrl_1.err.y = (except_AS.y - ahrs.Gyro_deg.y) *(300.0f / MAX_CTRL_ASPEED);  //-y
-	ctrl_1.err.z = (except_AS.z - ahrs.Gyro_deg.z) *(300.0f / MAX_CTRL_ASPEED);	 //-z
+	ctrl_1.err.y = (except_AS.y + ahrs.Gyro_deg.y) *(300.0f / MAX_CTRL_ASPEED);  //-y
+	ctrl_1.err.z = (except_AS.z + ahrs.Gyro_deg.z) *(300.0f / MAX_CTRL_ASPEED);	 //-z
 	/* 角速度误差权重 */
 	ctrl_1.err_weight.x = ABS(ctrl_1.err.x) / MAX_CTRL_ASPEED;
 	ctrl_1.err_weight.y = ABS(ctrl_1.err.y) / MAX_CTRL_ASPEED;
@@ -191,8 +191,8 @@ void CTRL_S:: CTRL_1(float T)  //x roll,y pitch,z yaw
 	ctrl_1.err_old.z = ctrl_1.err.z;
 
 	g_old[A_X] = ahrs.Gyro_deg.x;
-	g_old[A_Y] = ahrs.Gyro_deg.y;
-	g_old[A_Z] = ahrs.Gyro_deg.z;
+	g_old[A_Y] = -ahrs.Gyro_deg.y;
+	g_old[A_Z] = -ahrs.Gyro_deg.z;
 }
 
 
@@ -207,7 +207,7 @@ void CTRL_S:: Thr_Ctrl(float T)
 
 
 
-	Thr_tmp += 10 * 3.14f *T *(thr / 450.0f - Thr_tmp); //低通滤波
+	Thr_tmp += 10 * 3.14f *T *(thr / THR_BEFOR_FLY_UP - Thr_tmp); //低通滤波
 	//Thr_tmp += 10 *3.14f *T *(thr/530.0f - Thr_tmp); //低通滤波
 	Thr_Weight = LIMIT(Thr_tmp, 0, 1);    							//后边多处分离数据会用到这个值
 
@@ -223,8 +223,8 @@ void CTRL_S:: Thr_Ctrl(float T)
 	}
 
 #if(CTRL_HEIGHT)
-	Height_Ctrl(T, thr);
-	thr_value = Thr_Weight *height_ctrl_out;
+	hlt_ctl. Height_Ctrl(T, thr);
+	thr_value = Thr_Weight * hlt_ctl. height_ctrl_out;
 	// thr_value =  height_ctrl_out;   //实际使用值
 
 #else
@@ -244,10 +244,10 @@ void CTRL_S:: All_Out(float out_roll, float out_pitch, float out_yaw)
 
 	out_yaw = LIMIT(out_yaw, -5 * MAX_THR, 5 * MAX_THR); //50%
 
-	posture_value[0] = -out_roll - out_pitch - out_yaw;
-	posture_value[1] = +out_roll - out_pitch + out_yaw;
-	posture_value[2] = +out_roll + out_pitch - out_yaw;
-	posture_value[3] = -out_roll + out_pitch + out_yaw;
+	posture_value[0] = -out_roll + out_pitch + out_yaw;
+	posture_value[1] = +out_roll + out_pitch - out_yaw;
+	posture_value[2] = +out_roll - out_pitch + out_yaw;
+	posture_value[3] = -out_roll - out_pitch - out_yaw;
 
 	for (i = 0; i<4; i++)
 	{

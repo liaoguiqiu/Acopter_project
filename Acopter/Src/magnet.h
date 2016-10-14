@@ -9,7 +9,7 @@
 
 
 
-#define CALIBRATING_MAG_CYCLES              20000  //校准时间持续20s
+#define CALIBRATING_MAG_CYCLES              10000  //校准时间持续20s
 
 
 #define AK8975_filt_num    3

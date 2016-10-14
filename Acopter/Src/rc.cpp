@@ -1,7 +1,9 @@
 #include "delay.h"
 #include "rc.h"
 #include "mymath.h"
- 
+#include "AHRS.h"
+#include "baro.h"
+#include"ctrl.h"
 Acopter_RC rc;
 
 const short MAX_CH[CH_NUM] = { 1930, 1930, 1930, 1930, 2070, 2070, 2070, 2070 };	//摇杆最大
@@ -110,6 +112,11 @@ void Acopter_RC::RC_Duty(float T, u16 tmp16_CH[CH_NUM])
 		NS_cnt = 0;
 		NS = 0;
 	}
+
+	/*-------------模式切换-------------*/
+	mode_switch();
+
+	/*-------------模式切换-------------*/
 }
 
 
@@ -163,7 +170,7 @@ void Acopter_RC:: Fly_Ready(float T)
 		ready_cnt = 0;
 	}
 
-
+/*-----------------------完成解锁的瞬间------------------------------------*/
 	if (ready_cnt > 1000) // 1000ms 
 	{
 		ready_cnt = -1;
@@ -172,7 +179,8 @@ void Acopter_RC:: Fly_Ready(float T)
 		{
 			// LED_STATES_1();
 			fly_ready = 1;
-			//mpu6050.Gyro_CALIBRATE = 2;
+			ahrs.Gyro_CALIBRATE = 2;
+			baro.CALL_OFFSET = 2;
 			for (short i = 0; i<7; i++)
 			{
 				sum_temp[i] = 0;
@@ -194,4 +202,23 @@ void Acopter_RC:: Feed_Rc_Dog(u8 ch_mode) //400ms内必须调用一次
 {
 	NS = ch_mode;
 	NS_cnt = 0;
+}
+
+void  Acopter_RC::mode_switch(void)
+{
+   
+	if (ctrl_s.thr < 100)//大于油门较小时运允许切换
+	{
+		if (CH_filter[4] <-100)
+		{
+			height_ctrl_mode = 0;
+		}
+		else 
+		{
+			height_ctrl_mode = 1;
+		}
+	}
+
+
+
 }
