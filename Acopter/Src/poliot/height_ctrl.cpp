@@ -111,10 +111,12 @@ void HLT_CTRL:: height_speed_ctrl(float T, float thr, float exp_z_speed, float h
 
 void HLT_CTRL::height_ctrl_outer(float T, float thr, float height,float speed)
 {
-
+	float aim_height;
 
 	exp_height_speed = ULTRA_SPEED *my_deathzoom_2(thr - THR_BEFOR_FLY_UP, 50) / 300.0f; //+-ULTRA_SPEEDmm / s
 	exp_height_speed = LIMIT(exp_height_speed, -ULTRA_SPEED, ULTRA_SPEED);
+	aim_height = ULTRA_MAX_HEIGHT*(thr - THR_BEFOR_FLY_UP) / (1000 - THR_BEFOR_FLY_UP);
+
 
 	if (exp_height > ULTRA_MAX_HEIGHT)
 	{
@@ -132,7 +134,7 @@ void HLT_CTRL::height_ctrl_outer(float T, float thr, float height,float speed)
 	}
 
 	exp_height += exp_height_speed *T;
-	exp_height = LIMIT(exp_height, 50, ULTRA_MAX_HEIGHT);
+	exp_height = LIMIT(exp_height, 50, aim_height);
 
 	ultra_ctrl.err = ((exp_height - height));
 	float kp_weight = 1;

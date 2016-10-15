@@ -51,7 +51,7 @@ enum
 #define MAX_CTRL_YAW_SPEED 	150.0f									//YAW允许的最大控制角速度
 #define CTRL_1_INT_LIMIT 		0.5f *MAX_CTRL_ASPEED		//内环积分幅度
 #define MAX_PWM				100			///%	最大PWM输出为100%油门
-#define MAX_THR       80 			///%	油门通道最大占比80%，留20%给控制量
+#define MAX_THR       60 			///%	油门通道最大占比80%，留20%给控制量
 #define READY_SPEED   10			///%	解锁后电机转速20%油门
 //=========================================
 

@@ -16,17 +16,17 @@ Datatrans data_trans;
 
 void Datatrans:: send_all_fly_data_to_ANO(void)
 {
-	send_15_data((s16)ctrl_s.ctrl_2.err_d.x, (s16)ctrl_s.ctrl_1.damp.x, (s16)ctrl_s.ctrl_1.err_d.x,
+	/*send_15_data((s16)ctrl_s.ctrl_2.err_d.x, (s16)ctrl_s.ctrl_1.damp.x, (s16)ctrl_s.ctrl_1.err_d.x,
 		(s16)ctrl_s. ctrl_2.out.x, (s16)ahrs.Gyro_deg.y, (s16)ahrs.Gyro_deg.z,
 		(s16)ctrl_s.ctrl_1.out.x, (s16)ctrl_s.ctrl_1.out.y, (s16)ctrl_s.ctrl_1.out.z,
 		(float) imu_dcm.Roll, (float) imu_dcm.Pitch, (float) imu_dcm.Yaw,
-		(s32) 0, (u8) 0, (u8) 0);
+		(s32) 0, (u8) 0, (u8) 0);*/
 
-	//send_15_data((s16)hlt_ctl.ultra_ctrl_out, (s16)baro.high_filed, (s16)baro.baro_alt_speed,
-	//	(s16)baro.speed_filed, (s16)hlt_ctl.wz_speed, (s16)hlt_ctl.z_height,
-	//	(s16)ctrl_s.thr, (s16)hlt_ctl.exp_height, (s16)ctrl_s.thr_value,
-	//	(float)imu_dcm.Roll, (float)imu_dcm.Pitch, (float)imu_dcm.Yaw,
-	//	(s32)0, (u8)0, (u8)0);
+	send_15_data((s16)hlt_ctl.ultra_ctrl_out, (s16)baro.high_filed, (s16)baro.baro_alt_speed,
+		(s16)baro.speed_filed, (s16)hlt_ctl.wz_speed, (s16)hlt_ctl.z_height,
+		(s16)ctrl_s.thr, (s16)hlt_ctl.exp_height, (s16)ctrl_s.thr_value,
+		(float)imu_dcm.Roll, (float)imu_dcm.Pitch, (float)imu_dcm.Yaw,
+		(s32)0, (u8)0, (u8)0);
 }
 void Datatrans:: acopter_Send_Data(u8 *dataToSend , u8 length)
 {

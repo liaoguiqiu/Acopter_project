@@ -196,7 +196,7 @@ void CTRL_S:: CTRL_1(float T)  //x roll,y pitch,z yaw
 }
 
 
-#define  CTRL_HEIGHT  0
+#define  CTRL_HEIGHT  1
 
 
 void CTRL_S:: Thr_Ctrl(float T)

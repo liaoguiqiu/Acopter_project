@@ -77,7 +77,7 @@ public:
 	
 	    HLT_CTRL( )
 	  {
-		  ULTRA_MAX_HEIGHT = 500;
+		  ULTRA_MAX_HEIGHT = 2000;
 	  
 	  }
 
