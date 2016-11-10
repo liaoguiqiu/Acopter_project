@@ -1141,6 +1141,21 @@
       </group>
       <group>
         <name>math</name>
+        <group>
+          <name>kalman</name>
+          <file>
+            <name>$PROJ_DIR$\..\Src\math\kalman.cpp</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\Src\math\kalman.h</name>
+          </file>
+        </group>
+        <group>
+          <name>matrix</name>
+          <file>
+            <name>$PROJ_DIR$\..\Src\math\matrix\Matrix.hpp</name>
+          </file>
+        </group>
         <file>
           <name>$PROJ_DIR$\..\Src\math\filter.cpp</name>
         </file>

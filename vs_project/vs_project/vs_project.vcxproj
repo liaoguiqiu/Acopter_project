@@ -161,6 +161,7 @@
     <ClCompile Include="..\..\Acopter\Src\magnet.cpp" />
     <ClCompile Include="..\..\Acopter\Src\main.c" />
     <ClCompile Include="..\..\Acopter\Src\math\filter.cpp" />
+    <ClCompile Include="..\..\Acopter\Src\math\kalman.cpp" />
     <ClCompile Include="..\..\Acopter\Src\math\matrix3.cpp" />
     <ClCompile Include="..\..\Acopter\Src\math\quaternion.cpp" />
     <ClCompile Include="..\..\Acopter\Src\math\vector3.cpp" />
@@ -259,6 +260,7 @@
     <ClInclude Include="..\..\Acopter\Src\led.h" />
     <ClInclude Include="..\..\Acopter\Src\magnet.h" />
     <ClInclude Include="..\..\Acopter\Src\math\filter.h" />
+    <ClInclude Include="..\..\Acopter\Src\math\kalman.h" />
     <ClInclude Include="..\..\Acopter\Src\math\matrix3.h" />
     <ClInclude Include="..\..\Acopter\Src\math\quaternion.h" />
     <ClInclude Include="..\..\Acopter\Src\math\rotation.h" />

@@ -3,7 +3,7 @@
 #include "i2c_soft.h" 
 #include "sys.h"
 #include "filter.h"
-
+#include "height_ctrl.h"
 
 BARO baro;
  
@@ -178,16 +178,31 @@ void  BARO::MS5611_BaroAltCalculate(void)
 void BARO:: height_speed_filter(float T)
 {
   
-  	   float high_filed_hz = 1;
+  	   float high_filed_hz = 3;
 	   float speed_filed_hz = 1;
-
+	    
 
 	baroAlt = baroAlt * 10;//mm
 	
-	high_filed += (1 / (1 + 1 / (high_filed_hz * 3.14f *T)))*(baroAlt - high_filed);
-	filter.Moving_Average(high_filed, h_filt_buff, BARO_fil_NUM, h_filt_cnt, &high_filed);
-	
+	//high_filed_lf += (1 / (1 + 1 / (high_filed_hz * 3.14f *T)))*(baroAlt - high_filed_lf);
+	//filter.Moving_Average(high_filed, h_filt_buff, BARO_fil_NUM, h_filt_cnt, &high_filed);
+	//if (open_kalman)
+		//baro_height_pos_acc_kalman.pos_acc_kalman(T, baroAlt, hlt_ctl.wz_acc_mms2);
 
+	/*high_filed = baro_height_pos_acc_kalman.X(0, 0);*/
+       // high_filed =high_filed_lf;
+	if (pos_wz_kalamn.start_cnt < 200)
+	{
+		pos_wz_kalamn.start_cnt++;
+		pos_wz_kalamn.X = baroAlt;
+	}
+	else
+	{
+	}
+	pos_wz_kalamn.Kalman_Filter(T, baroAlt, hlt_ctl.wz_speed);
+
+
+	high_filed = pos_wz_kalamn.X;
 	baro_alt_speed = (high_filed - baroAltOld)/T;//mm
 	speed_filed += (1 / (1 + 1 / (speed_filed_hz * 3.14f *T)))*(baro_alt_speed - speed_filed);
 

@@ -321,6 +321,9 @@
     <ClCompile Include="..\..\Acopter\Src\i2c_soft.cpp">
       <Filter>Source Files\drivers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Acopter\Src\math\kalman.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Acopter\Src\AHRS.h">
@@ -607,6 +610,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Acopter\Src\i2c_soft.h">
       <Filter>Source Files\drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Acopter\Src\math\kalman.h">
+      <Filter>Source Files\math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

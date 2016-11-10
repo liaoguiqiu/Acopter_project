@@ -4,7 +4,7 @@
 #include "include.h"
 #include "mymath.h"
 #include "i2c_soft.h"
-
+#include "kalman.h"
 
 #define MS5611_ADDR             0x77   //0xee //
 
@@ -30,8 +30,9 @@
 class BARO
 {
 public:
-	
-
+	  short open_kalman ;
+	Pos_Acc_Kalman baro_height_pos_acc_kalman;
+	Pos_WZ_Kalman pos_wz_kalamn;
 	  u8 ms5611_ok;
 	  int32_t baroAlt; 
           float baroAltOld;
@@ -56,6 +57,7 @@ public:
 	   unsigned  short speed_filt_cnt[2];
 	   float speed_filed;
 	   float high_filed;
+	   float high_filed_lf;
 	BARO()
 	{
 

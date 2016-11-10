@@ -30,6 +30,8 @@ G:\STM32\Acopter\Acopter\EWARM/../Src\UCOSII\PORT
 -I
 G:\STM32\Acopter\Acopter\EWARM/../Src\math
 -I
+G:\STM32\Acopter\Acopter\EWARM/../Src\math\matrix
+-I
 F:\software-windows\Iar\arm\CMSIS\Include
 -I
 F:\software-windows\Iar\arm\inc
@@ -65,6 +67,8 @@ G:\STM32\Acopter\Acopter\Src\UCOSII\CORE
 G:\STM32\Acopter\Acopter\Src\UCOSII\PORT
 -I
 G:\STM32\Acopter\Acopter\Src\math
+-I
+G:\STM32\Acopter\Acopter\Src\math\matrix
 -I
 F:\software-windows\Iar\arm\CMSIS\Include
 -DUSE_HAL_DRIVER=1

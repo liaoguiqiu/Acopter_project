@@ -196,7 +196,7 @@ void HLT_CTRL::speed_height_caculate_with_sensor(float T, float sensor_height, f
 	
 
 	z_height += wz_speed*T;
-	z_height += (1 / (1 + 1 / (0.2f *3.14f *T))) *(sensor_height - z_height);
+	z_height += (1 / (1 + 1 / (0.3f *3.14f *T))) *(sensor_height - z_height);
 	//z_height =   (z_height_old + wz_speed*T);
 	z_height_old = z_height;
 

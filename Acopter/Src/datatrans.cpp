@@ -11,6 +11,9 @@
 #define BYTE2(dwTemp)       ( *( (char *)(&dwTemp) + 2) )
 #define BYTE3(dwTemp)       ( *( (char *)(&dwTemp) + 3) )
 
+
+
+#define SEND_ONE_BETY_ONCE 1
 Datatrans data_trans;
 
 
@@ -22,11 +25,17 @@ void Datatrans:: send_all_fly_data_to_ANO(void)
 		(float) imu_dcm.Roll, (float) imu_dcm.Pitch, (float) imu_dcm.Yaw,
 		(s32) 0, (u8) 0, (u8) 0);*/
 
-	send_15_data((s16)hlt_ctl.ultra_ctrl_out, (s16)baro.high_filed, (s16)baro.baro_alt_speed,
-		(s16)baro.speed_filed, (s16)hlt_ctl.wz_speed, (s16)hlt_ctl.z_height,
+	send_15_data((s16)baro.baroAlt, (s16)baro.high_filed, (s16)hlt_ctl.z_height,
+		(s16)baro.speed_filed, (s16)hlt_ctl.wz_speed, (s16)baro.baro_alt_speed,
 		(s16)ctrl_s.thr, (s16)hlt_ctl.exp_height, (s16)ctrl_s.thr_value,
 		(float)imu_dcm.Roll, (float)imu_dcm.Pitch, (float)imu_dcm.Yaw,
 		(s32)0, (u8)0, (u8)0);
+
+	/*send_15_data((s16)baro.baroAlt, (s16)baro.high_filed, (s16)baro.baro_alt_speed,
+		(s16)baro.speed_filed, (s16)hlt_ctl.wz_acc, (s16)hlt_ctl.z_height,
+		(s16)ctrl_s.thr, (s16)hlt_ctl.exp_height, (s16)ctrl_s.thr_value,
+		(float)imu_dcm.Roll, (float)imu_dcm.Pitch, (float)imu_dcm.Yaw,
+		(s32)0, (u8)0, (u8)0);*/
 }
 void Datatrans:: acopter_Send_Data(u8 *dataToSend , u8 length)
 {
@@ -137,7 +146,7 @@ void Datatrans:: send_15_data(s16 a_x, s16 a_y, s16 a_z,
 		send_all_data = 1;
 		send_all_data_cnt = 0;
 	}
-
+#if  SEND_ONE_BETY_ONCE
 	if (send_all_data == 1)
 	{
 		acopter_Send_Data(&data_to_send[send_all_data_cnt], (u8)1);
@@ -147,7 +156,11 @@ void Datatrans:: send_15_data(s16 a_x, s16 a_y, s16 a_z,
 			send_all_data = 0;
 		}
 	}
+#else
+	acopter_Send_Data(data_to_send, (u8)_cnt+1);
+	send_all_data = 0;
 
+#endif
 
 
 }
