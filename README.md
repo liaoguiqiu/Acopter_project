@@ -5,4 +5,4 @@ this is a C/C++ autopolit project running on stm32 F407 to:
 2 Fusing these data to estimate the pitch,roll,yaw,angular rate,position, velocity and acceleration of UAV
 3 Controller
 
-Contact: liao.guiqiu@etu.unistra.fr
+Contact: liao.guiqiu@etu.unistra.fr;liaoguiqiu@outlook.com
