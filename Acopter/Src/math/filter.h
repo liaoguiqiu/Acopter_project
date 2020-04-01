@@ -8,7 +8,7 @@
 
 
 #define MED_WIDTH_NUM 11
-#define MED_FIL_ITEM  7
+#define MED_FIL_ITEM  17
 
 
 class Myfilt
@@ -30,7 +30,8 @@ public:
 
 	void simple_3d_trans(Vector3f *ref, Vector3f *in, Vector3f *out);
 	float Moving_Median_ae(u8 item, u8 width_num, float in);
-
+	void IIR_1st_lf(float T, float * in,  float * out, float alfa);
+	void IIR_second_lf(float T, float * in, float * save1, float * out, float alfa, float beta);
 
 private:
 

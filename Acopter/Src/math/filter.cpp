@@ -144,3 +144,13 @@ void Myfilt::simple_3d_trans(Vector3f *ref, Vector3f*in, Vector3f *out) //Ğ¡·¶Î§
 	out->z = ref->x *in->x + ref->y *in->y + ref->z *in->z;
 
 }
+void Myfilt::IIR_1st_lf(float T, float * in, float * out, float alfa)
+{
+	*out+= (1 / (1 + 1 / (alfa *3.14f *T))) *(*in - *out);
+}
+
+void Myfilt::IIR_second_lf(float T, float * in, float * save1, float * out, float alfa, float beta)
+{
+	IIR_1st_lf(T, in, save1, alfa);
+	IIR_1st_lf(T, save1, out, beta);
+}
