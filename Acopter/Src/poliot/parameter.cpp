@@ -6,7 +6,7 @@
 #include "ctrl.h"
 #include "sonar.h"
 #include "height_ctrl.h"
-
+#include "pos_ctrl.h"
 PARAMERTER parameter;
 
 
@@ -16,10 +16,26 @@ void PARAMERTER:: Para_Init()
 
 	if (  flash_save.flash_read_parameters()  == 1)
 	{
+		//¶¨µã
+		pos_ctrl.y_v_ctrl.Kp = pos_ctrl.x_v_ctrl.Kp;
+		pos_ctrl.y_v_ctrl.Ki = pos_ctrl.x_v_ctrl.Ki;
+		pos_ctrl.y_v_ctrl.Kd = pos_ctrl.x_v_ctrl.Kd;
+
+		pos_ctrl.y_pos_ctrl.Kp = pos_ctrl.x_pos_ctrl.Kp;
+		pos_ctrl.y_pos_ctrl.Ki = pos_ctrl.x_pos_ctrl.Ki;
+		pos_ctrl.y_pos_ctrl.Kd = pos_ctrl.x_pos_ctrl.Kd;
+
+		pos_ctrl.y_acc_ctrl.Kp = pos_ctrl.x_acc_ctrl.Kp;
+		pos_ctrl.y_acc_ctrl.Ki = pos_ctrl.x_acc_ctrl.Ki;
+		pos_ctrl.y_acc_ctrl.Kd = pos_ctrl.x_acc_ctrl.Kd;
+
+		mag_s.mag_theta = -0.6867;
+		mag_s.mag_s = 1.0888;
+		 
 
 		 
-		 
 		delay_ms(500);
+      
 		//                   SHOT_MAX_PWM=1300;
 		//                SHOT_MIN_PWM=1050;
 		//                PLANT_FORM=1650;
@@ -89,5 +105,19 @@ void PARAMERTER:: PID_Para_Init()
 	ctrl_s.Ctrl_Para_Init();
 	hlt_ctl. WZ_Speed_PID_Init();
 	hlt_ctl.Ultra_PID_Init();
+	pos_ctrl.y_v_ctrl.Kp = pos_ctrl.x_v_ctrl.Kp;
+	pos_ctrl.y_v_ctrl.Ki = pos_ctrl.x_v_ctrl.Ki;
+	pos_ctrl.y_v_ctrl.Kd = pos_ctrl.x_v_ctrl.Kd;
+
+	pos_ctrl.y_pos_ctrl.Kp = pos_ctrl.x_pos_ctrl.Kp;
+	pos_ctrl.y_pos_ctrl.Ki = pos_ctrl.x_pos_ctrl.Ki;
+	pos_ctrl.y_pos_ctrl.Kd = pos_ctrl.x_pos_ctrl.Kd;
+	mag_s.mag_theta = -0.6867;
+	mag_s.mag_s = 1.0888;
+	mag_s.Mag_Offset.x = 198.5;
+	mag_s.Mag_Offset.y = 2.5;
+	mag_s.Mag_Offset.z = 144.5;
+	mag_s.Mag_Gain.y = 0.9776;
+	mag_s.Mag_Gain.z = 2.2377;
 
 }

@@ -67,6 +67,7 @@ public:
 	s16 last_motor_out[4];
 	CTRL_S()
 	{
+
 		except_A.x = 0;
 		except_A.y = 0;
 		except_A.z = 0;
@@ -80,7 +81,7 @@ public:
 		ctrl_1.PID[PIDPITCH].kdamp = 1;
 		ctrl_1.PID[PIDYAW].kdamp = 1;
 
-		ctrl_1.FB = 0.20;   //Эт  0<fb<1
+		ctrl_1.FB = 0.1;   //Эт  0<fb<1
 	}
 
 

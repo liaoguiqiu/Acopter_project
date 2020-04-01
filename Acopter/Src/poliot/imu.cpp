@@ -4,6 +4,9 @@
 #include "filter.h"
 #include "rc.h"
 #include "height_ctrl.h"
+
+#include "imu_ekf2.h"
+
 IMU_DCM imu_dcm;
 
 void IMU_DCM:: IMUupdate(float half_T, float gx, float gy, float gz, float ax, float ay, float az, float *rol, float *pit, float *yaw)
@@ -54,14 +57,15 @@ void IMU_DCM:: IMUupdate(float half_T, float gx, float gy, float gz, float ax, f
 	norm_acc_lpf += NORM_ACC_LPF_HZ *(6.28f *half_T) *(norm_acc - norm_acc_lpf);  //10hz *3.14 * 2*0.001
 
 
-	if (ABS(ax)<8800 && ABS(ay)<8800 && ABS(az)<8800)
+	//if (ABS(ax)<8800 && ABS(ay)<8800 && ABS(az)<8800)
+	if (ABS(ax)<20000 && ABS(ay)<20000 && ABS(az)<20000)
 	{
 		//把加计的三维向量转成单位向量。
 		ax = ax / norm_acc_lpf;//4096.0f;
 		ay = ay / norm_acc_lpf;//4096.0f;
 		az = az / norm_acc_lpf;//4096.0f; 
 
-		if (7600 < norm_acc && norm_acc < 8800)
+		if (15000 < norm_acc && norm_acc < 20000)
 		{
 			/* 叉乘得到误差 */
 			ref.err_tmp.x = ay*reference_v.z - az*reference_v.y;
@@ -95,17 +99,17 @@ void IMU_DCM:: IMUupdate(float half_T, float gx, float gy, float gz, float ax, f
 	ref.err_Int.y = LIMIT(ref.err_Int.y, -IMU_INTEGRAL_LIM, IMU_INTEGRAL_LIM);
 	ref.err_Int.z = LIMIT(ref.err_Int.z, -IMU_INTEGRAL_LIM, IMU_INTEGRAL_LIM);
 
-	if (reference_v.z > 0.0f)
+	if (reference_v.z > 0.0f && ABS(* rol)<15&& ABS(* pit)<15 )
 	{
 
 		if (ctrl_s.thr>THR_BEFOR_FLY_UP )
 		{
-			yaw_correct = Kp *0.0f *To_180_degrees(yaw_mag - Yaw);
+			yaw_correct = Kp *1.05f *To_180_degrees(yaw_mag - Yaw);
 			//已经解锁，只需要低速纠正。
 		}
 		else
 		{
-			yaw_correct = Kp *0.0f *To_180_degrees(yaw_mag - Yaw);
+			yaw_correct = Kp *1.05f *To_180_degrees(yaw_mag - Yaw);
 			//没有解锁，视作开机时刻，快速纠正
 		}
 		// 		if( yaw_correct>360 || yaw_correct < -360  )
@@ -115,7 +119,10 @@ void IMU_DCM:: IMUupdate(float half_T, float gx, float gy, float gz, float ax, f
 		// 		}
 
 	}
-
+          else
+          {
+          yaw_correct=0;
+          }
 
 	//	ref.g.x = (gx - reference_v.x *yaw_correct) *ANGLE_TO_RADIAN + ( Kp*(ref.err.x + ref.err_Int.x) ) ;     //IN RADIAN
 	//	ref.g.y = (gy - reference_v.y *yaw_correct) *ANGLE_TO_RADIAN + ( Kp*(ref.err.y + ref.err_Int.y) ) ;		  //IN RADIAN
@@ -152,9 +159,58 @@ void IMU_DCM:: IMUupdate(float half_T, float gx, float gy, float gz, float ax, f
 	*pit = asin(2 * (ref_q[1] * ref_q[3] - ref_q[0] * ref_q[2])) *57.3f;
 	// 				//Yaw   = ( - fast_atan2(2*(ref_q[1]*ref_q[2] + ref_q[0]*ref_q[3]),ref_q[0]*ref_q[0] + ref_q[1]*ref_q[1] - ref_q[2]*ref_q[2] - ref_q[3]*ref_q[3]) )* 57.3;
 	*yaw = fast_atan2(2 * (-ref_q[1] * ref_q[2] - ref_q[0] * ref_q[3]), 2 * (ref_q[0] * ref_q[0] + ref_q[1] * ref_q[1]) - 1) *57.3f;// 
+	 roll_rad = *rol / 57.3;
+	 pit_rad = *pit / 57.3;
+	 yaw_rad = *yaw / 57.3;
 	// *yaw = yaw_mag;
+	//from_euler(*rol, *pit, *yaw, a_x, a_y, a_z, b_x, b_y, b_z, c_x, c_y, c_z);
+     //   from_euler(*rol, *pit, 0.0, a_x, a_y, a_z, b_x, b_y, b_z, c_x, c_y, c_z);
 
-
-
+	//from_euler((imu_ekf.roll), (imu_ekf.pith), 0.0, a_x, a_y, a_z, b_x, b_y, b_z, c_x, c_y, c_z);
+//	from_euler((imu_ekf2.roll), (imu_ekf2.pith), 0.0, a_x, a_y, a_z, b_x, b_y, b_z, c_x, c_y, c_z);
+	from_euler((imu_ekf2.roll_rad*57.3), (-imu_ekf2.pith_rad*57.3), 0.0, a_x, a_y, a_z, b_x, b_y, b_z, c_x, c_y, c_z);
 
 }
+
+
+
+void IMU_DCM::from_euler(float roll, float pitch, float yaw, float &a_x, float &a_y, float &a_z, float &b_x, float &b_y, float &b_z, float &c_x, float &c_y, float &c_z)
+{
+	float sinx = sinf(radians(roll));
+	float cosx = cosf(radians(roll));
+	float siny = sinf(radians(pitch));
+	float cosy = cosf(radians(pitch));
+	float sinz = sinf(radians(yaw));
+	float cosz = cosf(radians(yaw));
+
+	a_x = cosy * cosz;
+	a_y = -(sinx * siny * cosz) - (cosx * sinz);
+	a_z = -(cosx * siny * cosz) + (sinx * sinz);
+	b_x = cosy * sinz;
+	b_y = -(sinx * siny * sinz) + (cosx * cosz);
+	b_z = -(cosx * siny * sinz) - (sinx * cosz);
+	c_x = siny;
+	c_y = sinx * cosy;
+	c_z = cosx * cosy;
+	//imu_ekf.C_ned2b_body(0, 0) = a_x; imu_ekf.C_ned2b_body(0,1) = a_y; imu_ekf.C_ned2b_body(0, 2) = a_z;
+	//imu_ekf.C_ned2b_body(1, 0) = b_x; imu_ekf.C_ned2b_body(1, 1) = b_y; imu_ekf.C_ned2b_body(1, 2) = b_z;
+	//imu_ekf.C_ned2b_body(2, 0) = c_x; imu_ekf.C_ned2b_body(2, 1) = c_y; imu_ekf.C_ned2b_body(2, 2) = c_z;
+
+	//    float cp = arm_cos_f32(radians(pitch));
+	//    float sp = arm_sin_f32(radians(pitch));
+	//    float sr = arm_sin_f32(radians(roll));
+	//    float cr = arm_cos_f32(radians(roll));
+	//    float sy = arm_sin_f32(radians(yaw));
+	//    float cy = arm_cos_f32(radians(yaw));
+	//
+	//    a_x = cp * cy;
+	//    a_y = (sr * sp * cy) - (cr * sy);
+	//    a_z = (cr * sp * cy) + (sr * sy);
+	//    b_x = cp * sy;
+	//    b_y = (sr * sp * sy) + (cr * cy);
+	//    b_z = (cr * sp * sy) - (sr * cy);
+	//    c_x = -sp;
+	//    c_y = sr * cp;
+	//    c_z = cr * cp;
+}
+

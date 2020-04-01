@@ -3,6 +3,9 @@
 #include "rc.h"
 #include "pwm.h"
 #include "height_ctrl.h"
+#include "pos_ctrl.h"
+
+#include "imu_ekf2.h"
 CTRL_S ctrl_s;
 
 
@@ -22,15 +25,24 @@ void CTRL_S:: CTRL_2(float T)
 	// 	static Vector3f acc_no_g_lpf;
 	//=========================== 期望角度 ========================================
 
-
+	//roll
 	except_A.x = MAX_CTRL_ANGLE  *(my_deathzoom((-rc.CH_filter[ROL]), 60) / 500.0f);   //30
+	except_A.x = except_A.x + pos_ctrl.out_roll;
+	//pith
 	except_A.y = MAX_CTRL_ANGLE  *(my_deathzoom((-rc.CH_filter[PIT]), 60) / 500.0f);  //30
+	except_A.y = except_A.y + pos_ctrl.out_pitch;
 
+	if (pos_ctrl.Postion_hold_ctrl_on)
+	{
+		except_A.x =   pos_ctrl.out_roll;
+		//pith
+	//	except_A.y = MAX_CTRL_ANGLE  *(my_deathzoom((-rc.CH_filter[PIT]), 60) / 500.0f);  //30
+		except_A.y =   pos_ctrl.out_pitch;
 
-
+	}
 	 
 
-	if (thr>470  )
+	if (thr>(0.6f*THR_BEFOR_FLY_UP))
 	{
 		except_A.z += (s16)(MAX_CTRL_YAW_SPEED *(my_deathzoom_2((rc.CH_filter[YAW]), 60) / 500.0f)) *T;  //50
 
@@ -40,7 +52,7 @@ void CTRL_S:: CTRL_2(float T)
 	else
 	{
 		//except_A.z += 1 *3.14 *T *( Yaw - except_A.z );
-		except_A.z = imu_dcm. Yaw;
+		except_A.z = imu_ekf2.yaw;
 
 	}
 
@@ -64,9 +76,12 @@ void CTRL_S:: CTRL_2(float T)
 	//==============================================================================	
 
 	/* 得到角度误差 */
-	ctrl_2.err.y = To_180_degrees(ctrl_angle_offset.y + except_A.y - imu_dcm.Pitch);
-	ctrl_2.err.x = To_180_degrees(ctrl_angle_offset.x + except_A.x -imu_dcm. Roll);
-	ctrl_2.err.z = To_180_degrees(ctrl_angle_offset.z + except_A.z - imu_dcm.Yaw);
+	ctrl_2.err.y = To_180_degrees(ctrl_angle_offset.y + except_A.y - imu_ekf2.pith);
+	ctrl_2.err.x = To_180_degrees(ctrl_angle_offset.x + except_A.x - imu_ekf2.roll);
+	ctrl_2.err.z = To_180_degrees(ctrl_angle_offset.z + except_A.z - imu_ekf2.yaw);
+	/*ctrl_2.err.y = To_180_degrees(ctrl_angle_offset.y + except_A.y - imu_dcm.Pitch);
+	ctrl_2.err.x = To_180_degrees(ctrl_angle_offset.x + except_A.x - imu_dcm.Roll);
+	ctrl_2.err.z = To_180_degrees(ctrl_angle_offset.z + except_A.z - imu_dcm.Yaw);*/
 	/* 计算角度误差权重 */
 	ctrl_2.err_weight.x = ABS(ctrl_2.err.x) / ANGLE_TO_MAX_AS;
 	ctrl_2.err_weight.y = ABS(ctrl_2.err.y) / ANGLE_TO_MAX_AS;
@@ -244,10 +259,10 @@ void CTRL_S:: All_Out(float out_roll, float out_pitch, float out_yaw)
 
 	out_yaw = LIMIT(out_yaw, -5 * MAX_THR, 5 * MAX_THR); //50%
 
-	posture_value[0] = -out_roll + out_pitch + out_yaw;
-	posture_value[1] = +out_roll + out_pitch - out_yaw;
-	posture_value[2] = +out_roll - out_pitch + out_yaw;
-	posture_value[3] = -out_roll - out_pitch - out_yaw;
+	posture_value[0] = -out_roll - out_pitch + out_yaw;
+	posture_value[1] = -out_roll + out_pitch - out_yaw;
+	posture_value[2] = +out_roll + out_pitch + out_yaw;
+	posture_value[3] = +out_roll - out_pitch - out_yaw;
 
 	for (i = 0; i<4; i++)
 	{
