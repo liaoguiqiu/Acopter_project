@@ -7,19 +7,27 @@
 
 #define  I2C_DELAY_TIME 3;
 
+///***************I2C GPIO定义******************/
+//#define ANO_GPIO_I2C	   GPIOB
+//#define I2C_Pin_SCL		IIC_SCL_Pin
+//#define I2C_Pin_SDA		 IIC_SDA_Pin
+//#define ANO_RCC_I2C		//RCC_AHB1Periph_GPIOB
+///*********************************************/
+
+/***************I2C GPIO定义******************/
+#define ANO_GPIO_I2C	   GPIOC
+#define I2C_Pin_SCL		IIC2_SCL_Pin
+#define I2C_Pin_SDA		 IIC2_SDA_Pin
+#define ANO_RCC_I2C		//RCC_AHB1Periph_GPIOB
+/*********************************************/
+
+
 #define SCL_H         ANO_GPIO_I2C->BSRR = I2C_Pin_SCL
 #define SCL_L        ANO_GPIO_I2C->BSRR =  (uint32_t)I2C_Pin_SCL << 16U
 #define SDA_H        ANO_GPIO_I2C->BSRR = I2C_Pin_SDA
 #define SDA_L        ANO_GPIO_I2C->BSRR=  (uint32_t)I2C_Pin_SDA << 16U
 #define SCL_read        ANO_GPIO_I2C->IDR  & I2C_Pin_SCL
 #define SDA_read        ANO_GPIO_I2C->IDR  & I2C_Pin_SDA
-
-/***************I2C GPIO定义******************/
-#define ANO_GPIO_I2C	   GPIOB
-#define I2C_Pin_SCL		IIC_SCL_Pin
-#define I2C_Pin_SDA		 IIC_SDA_Pin
-#define ANO_RCC_I2C		//RCC_AHB1Periph_GPIOB
-/*********************************************/
 
 class I2c_SOFT
 {

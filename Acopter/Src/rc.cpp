@@ -4,6 +4,9 @@
 #include "AHRS.h"
 #include "baro.h"
 #include"ctrl.h"
+#include"gps.h"
+#include "pos_ctrl.h"
+#include "gps_kalman.h"
 Acopter_RC rc;
 
 const short MAX_CH[CH_NUM] = { 1930, 1930, 1930, 1930, 2070, 2070, 2070, 2070 };	//摇杆最大
@@ -206,19 +209,49 @@ void Acopter_RC:: Feed_Rc_Dog(u8 ch_mode) //400ms内必须调用一次
 
 void  Acopter_RC::mode_switch(void)
 {
-   
+   /************************************************************************/
+   /* 高度模式选择                                                                     */
+   /************************************************************************/
 	if (ctrl_s.thr < 100)//大于油门较小时运允许切换
 	{
 		if (CH_filter[4] <-100)
 		{
 			height_ctrl_mode = 0;
 		}
-		else 
+		else if (CH_filter[4] <100)
 		{
 			height_ctrl_mode = 1;
 		}
+		else //是否进入baro——gps融合
+		{
+			//是否进入GPS控制模式
+			if (gps.gps_state_flag==1)
+			height_ctrl_mode = 1;
+			else
+				height_ctrl_mode =1;
+		}
 	}
+	/************************************************************************/
+	/* 定点模式选择                                                                     */
+	/************************************************************************/
+	if (CH_filter[5]>0)
+	{
+		pos_ctrl.Postion_hold_ctrl_on = 1;//打开定点
 
+		if (CH_filter[4] >100) 
+		{
+			pos_ctrl.Pos_to_speed_on = 1;//打开位置外环
+		} 
+		else
+		{
+			pos_ctrl.Pos_to_speed_on = 0;
+		}
 
+	} 
+	else
+	{
+		
+		pos_ctrl.Postion_hold_ctrl_on = 0;
+	}
 
 }

@@ -7,7 +7,7 @@
 
 
 #define MAXMOTORS 		(4)		//电机数量
-#define GET_TIME_NUM 	(10)		//设置获取时间的数组数量
+#define GET_TIME_NUM 	(20)		//设置获取时间的数组数量
 #define CH_NUM 				(8) 	//接收机通道数量
 #define ANGLE_TO_RADIAN 0.01745329f //*0.01745 = /57.3	角度转弧度
 #define TO_ANGLE 				0.06103f 		//0.061036 //   4000/65536  +-2000   ???
@@ -58,6 +58,7 @@ enum
 
 extern char Init_Finish;
 extern UART_HandleTypeDef huart2;  
+extern UART_HandleTypeDef huart3;  
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;

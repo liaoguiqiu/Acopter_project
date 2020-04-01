@@ -52,7 +52,7 @@ void All_Init()
     HAL_TIM_IC_Start_IT(&htim12, TIM_CHANNEL_1);
     HAL_TIM_IC_Start_IT(&htim12, TIM_CHANNEL_2);
         __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
-  
+		__HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
       
 
 	time.Cycle_Time_Init();

@@ -32,8 +32,8 @@
 
 
 #define M_PI 3.141592653f
-#define DEG_TO_RAD 0.01745329f
-#define RAD_TO_DEG 57.29577951f
+#define DEG_TO_RAD 0.01745329251994329576f
+#define RAD_TO_DEG 57.29577951308232087679f
 
 
 #define ABS(x) ( (x)>0?(x):-(x) )

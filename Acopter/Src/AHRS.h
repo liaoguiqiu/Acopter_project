@@ -13,7 +13,7 @@
 #define GYRO_DEATH_ZOOM 20   //  20 / 65536
 
 #define OFFSET_AV_NUM 1000
-#define FILTER_NUM_A 40
+#define FILTER_NUM_A 10
 #define FILTER_NUM_G 10
 
 /*---------mpuÇý¶¯----------*/

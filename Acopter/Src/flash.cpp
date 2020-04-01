@@ -7,7 +7,7 @@
 #include "magnet.h"
 #include "height_ctrl.h"
 #include "delay.h" 
-
+#include "pos_ctrl.h"
 flash_save_para flash_save;
 FLASH_EraseInitTypeDef EraseInitStruct;
 uint32_t GetSector(uint32_t Address);
@@ -292,7 +292,7 @@ void flash_save_para::flash_save_parameters(void)
 	 
 
 
-	//光流
+	 
 	 
 	//高度
 	flash_float_to_byte((uint8_t *) save_arry,
@@ -323,7 +323,44 @@ void flash_save_para::flash_save_parameters(void)
 		&ctrl_s.ctrl_angle_offset.y);
 
 	//舵机零位与正式限幅
-	 
+	 //定点
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)55,
+		&pos_ctrl.x_v_ctrl.Kp);
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)56,
+		&pos_ctrl.x_v_ctrl.Ki);
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)57,
+		&pos_ctrl.x_v_ctrl.Kd);
+	//定点
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)58,
+		&pos_ctrl.x_pos_ctrl.Kp);
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)59,
+		&pos_ctrl.x_pos_ctrl.Ki);
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)60,
+		&pos_ctrl.x_pos_ctrl.Kd);
+	//磁力计 
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)61,
+		&mag_s.Mag_Gain.y);
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)62,
+		&mag_s.Mag_Gain.z);
+
+	//定点加速度环
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)63,
+		&pos_ctrl.x_acc_ctrl.Kp);
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)64,
+		&pos_ctrl.x_acc_ctrl.Ki);
+	flash_float_to_byte((uint8_t *)save_arry,
+		(short)65,
+		&pos_ctrl.x_acc_ctrl.Kd);
 
 	//        static short arry_size;
 	//        arry_size = sizeof( save_arry);
@@ -368,7 +405,7 @@ uint8_t flash_save_para:: flash_read_parameters(void)
 		flash_byte_to_float((uint8_t *) save_arry,
 			(short)7,
 			&ahrs.Acc_Offset.z);
-		 
+		//磁力计 
 		flash_byte_to_float((uint8_t *) save_arry,
 			(short)9,
 			&mag_s.Mag_Offset.x);
@@ -487,15 +524,50 @@ uint8_t flash_save_para:: flash_read_parameters(void)
 		flash_byte_to_float((uint8_t *) save_arry,
 			(short)52,
 			&hlt_ctl.ultra_pid.ki);
-
-
 		flash_byte_to_float((uint8_t *) save_arry,
 			(short)53,
 			&ctrl_s. ctrl_angle_offset.x);
 		flash_byte_to_float((uint8_t *) save_arry,
 			(short)54,
 			&ctrl_s.ctrl_angle_offset.y);
-		 
+		//定点
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)55,
+			&pos_ctrl.x_v_ctrl.Kp);
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)56,
+			&pos_ctrl.x_v_ctrl.Ki);
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)57,
+			&pos_ctrl.x_v_ctrl.Kd);
+		//定点
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)58,
+			&pos_ctrl.x_pos_ctrl.Kp);
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)59,
+			&pos_ctrl.x_pos_ctrl.Ki);
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)60,
+			&pos_ctrl.x_pos_ctrl.Kd);
+		//
+		//磁力计 
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)61,
+			&mag_s.Mag_Gain.y);
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)62,
+			&mag_s.Mag_Gain.z);
+		//定点加速度环
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)63,
+			&pos_ctrl.x_acc_ctrl.Kp);
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)64,
+			&pos_ctrl.x_acc_ctrl.Ki);
+		flash_byte_to_float((uint8_t *)save_arry,
+			(short)65,
+			&pos_ctrl.x_acc_ctrl.Kd);
 		return 1;
 	}
 	else

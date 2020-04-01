@@ -31,6 +31,7 @@ typedef struct
 	s16 cnt_10ms;
 	s16 cnt_20ms;
 	s16 cnt_50ms;
+	s16 cnt_100ms;
 	// s16 cnt_100ms;
 	u16 time;
 }loop_t;
@@ -39,6 +40,7 @@ typedef struct
 class Scheduler
 {
 public:
+     float ttttt1,tttttt2,tttttt3;
 	s16 loop_cnt;
 	loop_t loop;
 	loop_t loop2;
@@ -57,6 +59,7 @@ public:
 	void cyclest_Duty_10ms();
 	void cyclest_Duty_20ms();
 	void cyclest_Duty_50ms();
+	void cyclest_Duty_100ms();
         void cycler_Duty_1ms();
 	void cycler_Duty_3ms();
 	void cycler_Duty_5ms();

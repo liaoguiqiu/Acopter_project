@@ -24,18 +24,37 @@
 
 #define BARO_CALL_OFF_SET_TIME 10
 
-#define BARO_fil_NUM  20
+#define BARO_fil_NUM  5
 
 #define BARO_speed_fil_NUM  20
 class BARO
 {
 public:
+	BARO()
+	{
+		  high_filed_hz = 0.75;
+		  speed_filed_hz = 1;
+		  high_filed_hz2 = 0.6;
+		  speed_filed_hz2 = 2.6;
+	}
+	float high_filed_hz  ;
+	float speed_filed_hz ;
+        float high_filed_hz2  ;
+	float speed_filed_hz2 ;
+        
+        
 	  short open_kalman ;
-	Pos_Acc_Kalman baro_height_pos_acc_kalman;
-	Pos_WZ_Kalman pos_wz_kalamn;
+	  float high_kf_pos_acc;
+	  float wz_kf_pos_acc;
+	  float wz_kf_save[3];
+	  float acc_z_kf;
+	  float acc_z_feed_back;
+	  GPS_BARO_ACC_KF gps_baro_kf;
+	Pos_Acc_Kalman  height_pos_acc_kalman;
+	//Pos_WZ_Kalman pos_wz_kalamn;
 	  u8 ms5611_ok;
 	  int32_t baroAlt; 
-          float baroAltOld;
+          float baroAltOld[2];
 	  float baro_alt_speed;
 	    float pressure;
 	  float temperature_5611;
@@ -58,11 +77,7 @@ public:
 	   float speed_filed;
 	   float high_filed;
 	   float high_filed_lf;
-	BARO()
-	{
-
-
-	}
+	
 
 
 	//ÆøÑ¹¼Æ³õÊ¼»¯

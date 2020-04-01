@@ -1,4 +1,5 @@
 #include "AHRS.h"
+#include "filter.h"
 
 AHRS_S ahrs;
 
@@ -146,8 +147,10 @@ void AHRS_S:: MPU9250_Init(SPI_HandleTypeDef *hspi) {
 		{ 0x10, MPU6500_INT_PIN_CFG },    // Set INT_ANYRD_2CLEAR
 		{ 0x01, MPU6500_INT_ENABLE },     // Set RAW_RDY_EN
 		{ 0x00, MPU6500_PWR_MGMT_2 },     // Enable Acc & Gyro
-		{ 0x13, MPU6500_GYRO_CONFIG },    // default : +-1000dps
-		{ 0x08, MPU6500_ACCEL_CONFIG },   // default : +-4G
+		//{ 0x13, MPU6500_GYRO_CONFIG },    // default : +-1000dps
+		//{ 0x08, MPU6500_ACCEL_CONFIG },   // default : +-4G
+		{ 0x00, MPU6500_GYRO_CONFIG },    // default : +-1000dps
+		{ 0x00, MPU6500_ACCEL_CONFIG },   // default : +-4G
 		{ 0x07, MPU6500_CONFIG },         // default : LPS_20Hz
 		{ 0x0E, MPU6500_ACCEL_CONFIG_2 }, // default : LPS_10Hz 1101
 		{ 0x40, MPU6500_I2C_MST_CTRL },
@@ -323,7 +326,9 @@ void AHRS_S:: ahrs_Data_Offset()
 			acc_sum_cnt++;
 			sum_temp[A_X] += Acc_I16.x;
 			sum_temp[A_Y] += Acc_I16.y;
-			sum_temp[A_Z] += Acc_I16.z - 65536 / 8;   // +-8G
+			//sum_temp[A_Z] += Acc_I16.z - 65536 / 8;   // +-4G
+			sum_temp[A_Z] += Acc_I16.z - 65536 / 4;   // +-2G
+
 			//sum_temp[TEM] += Tempreature;
 
 			if (acc_sum_cnt >= OFFSET_AV_NUM)
@@ -388,7 +393,13 @@ void AHRS_S:: ahrs_Data_Prepare(float T)
 	Gyro_I16.y = (Byte16(int16_t, buffer[10], buffer[11]));   // Gyr.Y
 	Gyro_I16.z = (Byte16(int16_t, buffer[12], buffer[13]));    // Gyr.Z
 
-
+        Acc_I16.x=(int)filter.Moving_Median(4, 3, (float)Acc_I16.x);
+        Acc_I16.y=(int)filter.Moving_Median(5, 3, (float)Acc_I16.y);
+        Acc_I16.z=(int)filter.Moving_Median(6, 3, (float)Acc_I16.z);
+        
+        Gyro_I16.x=(int)filter.Moving_Median(7, 3, (float)Gyro_I16.x);
+        Gyro_I16.y=(int)filter.Moving_Median(8, 3, (float)Gyro_I16.y);
+        Gyro_I16.z=(int)filter.Moving_Median(9, 3, (float)Gyro_I16.z);
 	//Tempreature = ((((int16_t)mpu6050_buffer[6]) << 8) | mpu6050_buffer[7]); //tempreature
 	//TEM_LPF += 2 *3.14f *T *(Tempreature - TEM_LPF);
 	//Ftempreature = TEM_LPF/340.0f + 36.5f;
@@ -472,9 +483,9 @@ void  AHRS_S:: ahrs_data_filt(float T)
 	//	 Gyro_deg.x =  Gyro.x *TO_ANGLE;
 	//	 Gyro_deg.y =  Gyro.y *TO_ANGLE;
 	//	 Gyro_deg.z =  Gyro.z *TO_ANGLE;
-	 Gyro_deg.x =  Gyro.x *MPU9250G_1000dps;
-	 Gyro_deg.y =  Gyro.y *MPU9250G_1000dps;
-	 Gyro_deg.z =  Gyro.z *MPU9250G_1000dps;
+	Gyro_deg.x = Gyro.x *MPU9250G_250dps;
+	Gyro_deg.y = Gyro.y *MPU9250G_250dps;
+	Gyro_deg.z = Gyro.z *MPU9250G_250dps;
 	//  MPU9250G_1000dps
 
 

@@ -14,6 +14,10 @@ void LED ::led_change ()
 
 		else if (rc.height_ctrl_mode==1)
 		led_state2();
+		else if (rc.height_ctrl_mode == 2)
+		{
+			led_state0();
+		}
 
 	}
 	else
@@ -74,7 +78,7 @@ void LED::led_state2()
 		on_time--;
 		if (on_time == 0)
 		{
-			off_time = 100;
+			off_time = 10;
 			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
 		}
 		
@@ -85,14 +89,14 @@ void LED::led_state2()
 		off_time--;
 		if (off_time == 0)
 		{
-			on_time = 100;
+			on_time = 10;
 			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_RESET);
 		}
 
 	}
 	else
 	{
-		off_time = 100;
+		off_time = 10;
 	}
 
 
