@@ -10,7 +10,7 @@ rotorcraft version 2.0
 3 Controller
 
 -The configration of the micro-processor is shown as below:
-<img align="left" src= "https://github.com/liaoguiqiu/Acopter_project/blob/master/config%20of%20stm32.jpg">
+<img align="left" src= "https://github.com/liaoguiqiu/Acopter_project/blob/master/config%20of%20stm32.jpg"><br/>
 
 
 -Please see the detail of PCB design in:
