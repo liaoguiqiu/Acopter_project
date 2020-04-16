@@ -12,7 +12,7 @@ rotorcraft version 2.0
 -The configration of the micro-processor is shown as below:
 
 <p align="center">
-    <img align="left" src= "https://github.com/liaoguiqiu/Acopter_project/blob/master/config%20of%20stm32.jpg" >
+    <img  src= "https://github.com/liaoguiqiu/Acopter_project/blob/master/config%20of%20stm32.jpg" >
 </p>
 
 
