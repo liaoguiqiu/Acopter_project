@@ -20,4 +20,7 @@ rotorcraft version 2.0
 -Please see the detail of PCB design in:
 circuit diagram of mother board.pdf
 
+
+ps: the stabliest navigation code is thie version of EKF at: Acopter_project/Acopter/Src/poliot/imu_ekf2.cpp
+
 Contact: liaoguiqiu@outlook.com
