@@ -17,10 +17,13 @@ rotorcraft version 2.0
 </p>
 
 
+
 -Please see the detail of PCB design in:
 circuit diagram of mother board.pdf
 
 
 ps: the stabliest navigation EKF codes version is : Acopter_project/Acopter/Src/poliot/imu_ekf2.cpp ; The matlab simulation codes of"imu_ekf2.cpp" can be seen in https://github.com/liaoguiqiu/Augmented-EKF
 
+The paper for navigation algorithm is:
+https://arxiv.org/abs/2008.10469
 Contact: liaoguiqiu@outlook.com
